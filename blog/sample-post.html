@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started with Web Development - Blog</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="../index.html" class="logo">AG</a>
+            <ul class="nav-links">
+                <li><a href="../index.html#home" class="nav-link">Home</a></li>
+                <li><a href="../index.html#about" class="nav-link">About</a></li>
+                <li><a href="../index.html#projects" class="nav-link">Projects</a></li>
+                <li><a href="../blog.html" class="nav-link active">Blog</a></li>
+                <li><a href="../index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <button class="menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Post Header -->
+    <header class="post-header">
+        <div class="container">
+            <a href="../blog.html" class="back-link">← Back to Blog</a>
+            <h1 class="page-title">Getting Started with Web Development</h1>
+            <div class="post-meta">
+                <span>📅 February 4, 2026</span>
+                <span>⏱️ 5 min read</span>
+                <span>🏷️ Web Development, Tutorial</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Post Content -->
+    <article class="post-content">
+        <div class="container">
+            <h2>Introduction</h2>
+            <p>
+                Web development is an exciting field that combines creativity with technical skills. 
+                In this post, I'll share what I've learned about getting started with modern web development 
+                and the essential tools and technologies you need to know.
+            </p>
+
+            <h2>The Three Pillars of Web Development</h2>
+            
+            <h3>1. HTML - The Structure</h3>
+            <p>
+                HTML (HyperText Markup Language) is the backbone of any website. It provides the structure 
+                and content of web pages. Here's a simple example:
+            </p>
+            <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;My First Page&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Hello, World!&lt;/h1&gt;
+    &lt;p&gt;This is my first web page.&lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+            <h3>2. CSS - The Style</h3>
+            <p>
+                CSS (Cascading Style Sheets) is what makes websites look good. It controls colors, layouts, 
+                fonts, and animations. Modern CSS includes powerful features like Grid and Flexbox for layouts.
+            </p>
+            <pre><code>/* Example CSS */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.heading {
+  color: #6366f1;
+  font-size: 2.5rem;
+  font-weight: bold;
+}</code></pre>
+
+            <h3>3. JavaScript - The Behavior</h3>
+            <p>
+                JavaScript brings interactivity to websites. It allows you to respond to user actions, 
+                fetch data from servers, and create dynamic content. Here's a simple example:
+            </p>
+            <pre><code>// Add event listener to a button
+const button = document.querySelector('.btn');
+button.addEventListener('click', () => {
+  alert('Button clicked!');
+});</code></pre>
+
+            <h2>Essential Tools</h2>
+            <p>To start your web development journey, you'll need a few tools:</p>
+            <ul>
+                <li><strong>Code Editor:</strong> VS Code is a popular choice with great extensions</li>
+                <li><strong>Browser:</strong> Chrome or Firefox with DevTools for debugging</li>
+                <li><strong>Version Control:</strong> Git for tracking changes in your code</li>
+                <li><strong>Package Manager:</strong> npm or yarn for managing dependencies</li>
+            </ul>
+
+            <h2>Learning Resources</h2>
+            <p>Here are some excellent resources for learning web development:</p>
+            <ol>
+                <li><strong>MDN Web Docs:</strong> Comprehensive documentation for web technologies</li>
+                <li><strong>freeCodeCamp:</strong> Free interactive coding challenges</li>
+                <li><strong>CSS-Tricks:</strong> Great articles and guides on CSS</li>
+                <li><strong>JavaScript.info:</strong> In-depth JavaScript tutorials</li>
+            </ol>
+
+            <h2>Best Practices</h2>
+            <p>As you start building websites, keep these best practices in mind:</p>
+            <ul>
+                <li>Write semantic HTML for better accessibility</li>
+                <li>Use CSS variables for maintainable styles</li>
+                <li>Follow mobile-first responsive design principles</li>
+                <li>Optimize images and assets for performance</li>
+                <li>Test your website across different browsers</li>
+                <li>Keep your code DRY (Don't Repeat Yourself)</li>
+            </ul>
+
+            <h2>Next Steps</h2>
+            <p>
+                Once you're comfortable with the basics, you can explore frameworks and libraries like 
+                React, Vue, or Angular. You can also dive into backend development with Node.js, Python, 
+                or other server-side languages.
+            </p>
+            <p>
+                Remember, the key to becoming a good developer is practice. Build projects, experiment 
+                with new technologies, and don't be afraid to make mistakes. That's how we learn!
+            </p>
+
+            <h2>Conclusion</h2>
+            <p>
+                Web development is a rewarding skill that opens up many opportunities. Start with the 
+                basics, build projects, and continuously learn. The web development community is welcoming 
+                and full of resources to help you on your journey.
+            </p>
+            <p>
+                Happy coding! 🚀
+            </p>
+
+            <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+                <a href="../blog.html" class="back-link">← Back to Blog</a>
+            </div>
+        </div>
+    </article>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Adesh Ghadage. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

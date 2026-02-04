@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Name - Portfolio</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="../index.html" class="logo">AG</a>
+            <ul class="nav-links">
+                <li><a href="../index.html#home" class="nav-link">Home</a></li>
+                <li><a href="../index.html#about" class="nav-link">About</a></li>
+                <li><a href="../index.html#projects" class="nav-link active">Projects</a></li>
+                <li><a href="../blog.html" class="nav-link">Blog</a></li>
+                <li><a href="../index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <button class="menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Project Detail -->
+    <section class="project-detail">
+        <div class="container">
+            <a href="../index.html#projects" class="back-link">← Back to Projects</a>
+            
+            <h1 class="page-title">Project Name</h1>
+            
+            <!-- Project Overview -->
+            <div class="project-overview">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <div>
+                        <span class="project-status">Completed</span>
+                        <span style="margin-left: 1rem; color: var(--text-secondary);">📅 January 2026</span>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <a href="#" class="btn btn-primary" target="_blank">View Live</a>
+                        <a href="#" class="btn btn-secondary" target="_blank">GitHub</a>
+                    </div>
+                </div>
+                <p style="color: var(--text-secondary); font-size: 1.1rem; line-height: 1.8;">
+                    A comprehensive description of your project. Explain what problem it solves, 
+                    who it's for, and what makes it unique. This is your chance to showcase the 
+                    value and impact of your work.
+                </p>
+                <div class="project-tags" style="margin-top: 1.5rem;">
+                    <span class="tag">React</span>
+                    <span class="tag">Node.js</span>
+                    <span class="tag">MongoDB</span>
+                    <span class="tag">Express</span>
+                    <span class="tag">REST API</span>
+                </div>
+            </div>
+
+            <!-- Problem Statement -->
+            <div class="project-section">
+                <h2>Problem Statement</h2>
+                <p>
+                    Describe the problem or challenge that your project addresses. Explain why 
+                    this problem is important and who it affects. This sets the context for your solution.
+                </p>
+                <p>
+                    For example: "Many small businesses struggle to manage their inventory efficiently, 
+                    leading to stockouts and overstocking. Manual tracking is time-consuming and prone 
+                    to errors."
+                </p>
+            </div>
+
+            <!-- Solution -->
+            <div class="project-section">
+                <h2>Solution</h2>
+                <p>
+                    Explain your solution and approach. What did you build and how does it solve the 
+                    problem? Highlight the key features and functionalities.
+                </p>
+                <ul style="color: var(--text-secondary); margin: 1rem 0 1.5rem 2rem;">
+                    <li>Feature 1: Description of the first key feature</li>
+                    <li>Feature 2: Description of the second key feature</li>
+                    <li>Feature 3: Description of the third key feature</li>
+                    <li>Feature 4: Description of additional features</li>
+                </ul>
+            </div>
+
+            <!-- Architecture Diagram -->
+            <div class="project-section">
+                <h2>System Architecture</h2>
+                <p>
+                    Visual representation of your system architecture. This helps others understand 
+                    how different components interact with each other.
+                </p>
+                <div class="diagram-container">
+                    <div class="diagram-placeholder">
+                        <div style="text-align: center;">
+                            <p>📊 Architecture Diagram</p>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">
+                                Replace this with your actual diagram image:
+                                <br>
+                                <code style="color: var(--accent-primary);">&lt;img src="../images/architecture.png" alt="Architecture"&gt;</code>
+                            </p>
+                            <p style="font-size: 0.875rem; margin-top: 1rem;">
+                                You can create diagrams using tools like:
+                                <br>
+                                • draw.io • Lucidchart • Figma • Excalidraw
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technical Implementation -->
+            <div class="project-section">
+                <h2>Technical Implementation</h2>
+                <h3 style="font-size: 1.3rem; margin-top: 1.5rem; margin-bottom: 1rem;">Frontend</h3>
+                <p>
+                    Describe the frontend implementation. What framework/library did you use? 
+                    What were the key technical decisions?
+                </p>
+                <pre style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; overflow-x: auto; margin: 1rem 0;"><code>// Example code snippet
+import React, { useState, useEffect } from 'react';
+
+function DataFetcher() {
+  const [data, setData] = useState([]);
+  
+  useEffect(() => {
+    fetchData();
+  }, []);
+  
+  const fetchData = async () => {
+    const response = await fetch('/api/data');
+    const result = await response.json();
+    setData(result);
+  };
+  
+  return &lt;DataDisplay data={data} /&gt;;
+}</code></pre>
+
+                <h3 style="font-size: 1.3rem; margin-top: 2rem; margin-bottom: 1rem;">Backend</h3>
+                <p>
+                    Explain your backend architecture, API design, database schema, and any 
+                    interesting technical challenges you solved.
+                </p>
+                <pre style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; overflow-x: auto; margin: 1rem 0;"><code>// Example API endpoint
+app.get('/api/data', async (req, res) => {
+  try {
+    const data = await DataModel.find()
+      .sort({ createdAt: -1 })
+      .limit(10);
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});</code></pre>
+
+                <h3 style="font-size: 1.3rem; margin-top: 2rem; margin-bottom: 1rem;">Database Schema</h3>
+                <p>Show your database design or schema:</p>
+                <div class="diagram-container">
+                    <div class="diagram-placeholder">
+                        <div style="text-align: center;">
+                            <p>🗄️ Database Schema</p>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">
+                                Add your database schema diagram here
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Flow -->
+            <div class="project-section">
+                <h2>Data Flow</h2>
+                <p>
+                    Explain how data flows through your system. This helps readers understand 
+                    the complete user journey and system interactions.
+                </p>
+                <div class="diagram-container">
+                    <div class="diagram-placeholder">
+                        <div style="text-align: center;">
+                            <p>🔄 Data Flow Diagram</p>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">
+                                Show the flow of data from user input to database and back
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenges & Solutions -->
+            <div class="project-section">
+                <h2>Challenges & Solutions</h2>
+                <div style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 1.5rem;">
+                    <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">Challenge 1: Performance Optimization</h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">
+                        The application was slow when loading large datasets.
+                    </p>
+                    <p style="color: var(--text-secondary);">
+                        <strong>Solution:</strong> Implemented pagination, lazy loading, and database indexing 
+                        to improve query performance by 70%.
+                    </p>
+                </div>
+                
+                <div style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 1.5rem;">
+                    <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">Challenge 2: Real-time Updates</h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">
+                        Users needed to see updates in real-time without refreshing the page.
+                    </p>
+                    <p style="color: var(--text-secondary);">
+                        <strong>Solution:</strong> Integrated WebSocket for real-time bidirectional communication 
+                        between client and server.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Key Learnings -->
+            <div class="project-section">
+                <h2>Key Learnings</h2>
+                <ul style="color: var(--text-secondary); margin: 1rem 0 1.5rem 2rem;">
+                    <li>Learned how to optimize React applications for better performance</li>
+                    <li>Gained experience with RESTful API design and best practices</li>
+                    <li>Improved skills in database modeling and query optimization</li>
+                    <li>Understood the importance of proper error handling and logging</li>
+                    <li>Learned to write maintainable and scalable code</li>
+                </ul>
+            </div>
+
+            <!-- Future Improvements -->
+            <div class="project-section">
+                <h2>Future Improvements</h2>
+                <ul style="color: var(--text-secondary); margin: 1rem 0 1.5rem 2rem;">
+                    <li>Add user authentication and authorization</li>
+                    <li>Implement advanced analytics dashboard</li>
+                    <li>Add mobile application using React Native</li>
+                    <li>Integrate third-party APIs for enhanced functionality</li>
+                    <li>Add comprehensive unit and integration tests</li>
+                </ul>
+            </div>
+
+            <!-- Project Links -->
+            <div style="margin-top: 3rem; padding: 2rem; background: var(--bg-secondary); border-radius: 12px; border: 1px solid var(--border-color); text-align: center;">
+                <h3 style="margin-bottom: 1.5rem;">Check Out the Project</h3>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="#" class="btn btn-primary" target="_blank">Live Demo</a>
+                    <a href="#" class="btn btn-secondary" target="_blank">GitHub Repository</a>
+                    <a href="#" class="btn btn-secondary" target="_blank">Documentation</a>
+                </div>
+            </div>
+
+            <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+                <a href="../index.html#projects" class="back-link">← Back to Projects</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Adesh Ghadage. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>
