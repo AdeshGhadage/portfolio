@@ -64,29 +64,21 @@ a {
 
 .navbar .container {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: 1rem 2rem;
-}
-
-.logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    transition: transform 0.3s ease;
-}
-
-.logo:hover {
-    transform: scale(1.1);
+    position: relative;
 }
 
 .nav-links {
     display: flex;
     list-style: none;
     gap: 2rem;
+}
+
+.menu-toggle {
+    position: absolute;
+    right: 2rem;
 }
 
 .nav-link {
@@ -451,6 +443,25 @@ section {
     font-size: 1rem;
 }
 
+.company-link {
+    color: var(--accent-primary);
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.company-link::after {
+    content: '↗';
+    font-size: 0.85rem;
+    opacity: 0.7;
+}
+
+.company-link:hover {
+    color: var(--accent-secondary);
+    text-decoration: underline;
+}
+
 .experience-duration {
     color: var(--text-secondary);
     font-size: 0.875rem;
@@ -495,6 +506,41 @@ section {
     flex-wrap: wrap;
     gap: 0.5rem;
     margin-top: 1rem;
+}
+
+.experience-certificate {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.certificate-icon {
+    font-size: 1.2rem;
+}
+
+.certificate-link {
+    color: var(--accent-primary);
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.certificate-link::after {
+    content: ' →';
+    transition: transform 0.3s ease;
+    display: inline-block;
+}
+
+.certificate-link:hover {
+    color: var(--accent-secondary);
+}
+
+.certificate-link:hover::after {
+    transform: translateX(3px);
 }
 
 /* ======================
@@ -855,7 +901,7 @@ section {
 .contact-btn {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
     padding: 1rem 2rem;
     background: var(--bg-tertiary);
     border: 1px solid var(--border-color);
@@ -864,14 +910,21 @@ section {
     font-size: 1rem;
 }
 
-.contact-btn span {
-    font-size: 1.5rem;
+.contact-btn svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
 }
 
 .contact-btn:hover {
     background: var(--accent-primary);
     border-color: var(--accent-primary);
     transform: translateY(-2px);
+}
+
+.contact-btn:hover svg {
+    transform: scale(1.1);
 }
 
 /* ======================
