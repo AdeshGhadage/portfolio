@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Name - Portfolio</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="../index.html" class="logo">AG</a>
+            <ul class="nav-links">
+                <li><a href="../index.html#home" class="nav-link">Home</a></li>
+                <li><a href="../index.html#about" class="nav-link">About</a></li>
+                <li><a href="../index.html#projects" class="nav-link active">Projects</a></li>
+                <li><a href="../blog.html" class="nav-link">Blog</a></li>
+                <li><a href="../index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <button class="menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Project Detail -->
+    <section class="project-detail">
+        <div class="container">
+            <a href="../index.html#projects" class="back-link">← Back to Projects</a>
+
+            <h1 class="page-title">ChatCluster — Scalable Real-Time Chat System on Kubernetes</h1>
+
+            <!-- Project Overview -->
+            <div class="project-overview">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <div>
+                        <span class="project-status">Completed</span>
+                        <span style="margin-left: 1rem; color: var(--text-secondary);">Feb 2025 - May 2025</span>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <!-- <a href="#" class="btn btn-primary" target="_blank">View Live</a> -->
+                        <a href="https://github.com/AdeshGhadage/chatapp-cluster" class="btn btn-secondary"
+                            target="_blank">GitHub</a>
+                    </div>
+                </div>
+                <p style="color: var(--text-secondary); font-size: 1.1rem; line-height: 1.8;">
+                    ChatCluster is a production-grade, real-time messaging platform built with a focus on scalability,
+                    security, and modern DevOps practices.
+                    The system demonstrates expertise in distributed systems,
+                    real-time communication protocols, containerization, and microservices architecture.
+                </p>
+                <div class="project-tags" style="margin-top: 1.5rem;">
+                    <span class="tag">React</span>
+                    <span class="tag">Node.js</span>
+                    <span class="tag">MongoDB</span>
+                    <span class="tag">Express</span>
+                    <span class="tag">REST API</span>
+                </div>
+            </div>
+
+            <!-- Problem Statement -->
+            <div class="project-section">
+                <h2>Problem Statement</h2>
+                <p>
+                    Many organizations rely on real-time communication tools, but most
+                    available solutions are costly, vendor-locked, or lack data transparency.
+                    Since HTTP-based systems are not built for real-time interactions, creating a
+                    low-latency, scalable, and secure chat platform that supports thousands of concurrent
+                    users remains a significant challenge—especially
+                    for teams seeking self-hosted and cost-efficient solutions.
+                </p>
+            </div>
+
+            <!-- Solution -->
+            <div class="project-section">
+                <h2>Solution</h2>
+                <p>
+                    To address these challenges, I built ChatCluster, a self-hosted, real-time chat platform designed
+                    for scalability, low latency, and full data control. The system uses persistent WebSocket
+                    connections to enable instant bidirectional communication, while a containerized microservices
+                    architecture ensures reliability, portability, and horizontal scalability. By combining efficient
+                    state management, secure authentication, and optimized message persistence, ChatCluster delivers
+                    real-time messaging without relying on expensive or proprietary third-party platforms.
+                </p>
+                <ul style="color: var(--text-secondary); margin: 1rem 0 1.5rem 2rem;">
+                    <li>Feature 1: Real-Time Messaging with Socket.IO
+                        <p style="color: var(--text-secondary); margin-top: 0.5rem;">
+                            ChatCluster uses Socket.IO to enable instant, bidirectional messaging between users. It
+                            supports automatic reconnections, heartbeat checks, and event-based communication, ensuring
+                            reliable message delivery even under unstable network conditions.
+                        </p>
+                    </li>
+                    <li>Feature 2: Horizontally Scalable Architecture
+                        <p style="color: var(--text-secondary); margin-top: 0.5rem;">
+                            The application is containerized using Docker and deployed on Kubernetes, allowing multiple
+                            backend instances to handle concurrent Socket.IO connections. This enables horizontal
+                            scaling and high availability as user traffic grows.
+                        </p>
+                    </li>
+                    <li>Feature 3: Secure Authentication and Authorization
+                        <p style="color: var(--text-secondary); margin-top: 0.5rem;">
+                            The platform uses token-based authentication to securely establish Socket.IO connections
+                            while keeping the backend stateless. Access control ensures that only authorized users can
+                            participate in conversations.
+                        </p>
+                    </li>
+                    <li>Feature 4: Message Persistence and User Presence Tracking
+                        <p style="color: var(--text-secondary); margin-top: 0.5rem;">
+                            Messages are persisted in a database for reliable chat history and conversation continuity.
+                            The system also tracks user presence (online/offline status) across multiple devices and
+                            sessions in real time.
+                        </p>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Architecture Diagram -->
+            <div class="project-section">
+                <h2>System Architecture</h2>
+                <p>
+                    Visual representation of your system architecture. This helps others understand
+                    how different components interact with each other.
+                </p>
+                <div class="diagram-container">
+                    <div class="diagram-placeholder">
+                        <div style="text-align: center;">
+                            <img src="/images/chatcluster-archi.png" alt="System Architecture Diagram"
+                                style="max-width: 100%; height: auto;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technical Implementation -->
+            <div class="project-section">
+                <h2>System Implementation</h2>
+                <h3 style="font-size: 1.3rem; margin-top: 1.5rem; margin-bottom: 1rem;">Functional Requirements</h3>
+                <ul style="color: var(--text-secondary); margin: 1rem 0 1.5rem 2rem;">
+                    <li>
+                        User Authentication: Users must be able to securely log in and establish a WebSocket connection
+                        using token-based authentication.
+                    </li>
+                    <li>
+                        User Profiles: Each user has a profile with a username, display name, and avatar. Users can
+                        update their profiles and see others' profiles in the chat interface.
+                    </li>
+                    <li>
+                        Real-Time Messaging: Users can send and receive messages instantly in one-on-one conversations.
+                        Messages should be delivered with low latency.
+                    </li>
+                </ul>
+
+
+                <h3 style="font-size: 1.3rem; margin-top: 2rem; margin-bottom: 1rem;">Non Functional Requirements</h3>
+                <ul style="color: var(--text-secondary); margin: 1rem 0 1.5rem 2rem;">
+                    <li>
+                        Rest API response time should be less than 200ms under normal load conditions.
+                    </li>
+                    <li>
+                        Real time messaging latency should be under 100ms for 95% of messages under normal load
+                        conditions.
+                    </li>
+                    <li>
+                        socket.io connection should be able to handle at least 1000 concurrent connections without
+                        significant performance degradation.
+                    </li>
+                    <li>
+                        Target uptime of 99.9% for the entire system, including backend services and WebSocket
+                        connections.
+                    </li>
+                </ul>
+
+                <h3 style="font-size: 1.3rem; margin-top: 2rem; margin-bottom: 1rem;">Database Schema</h3>
+                <p>database design or schema:</p>
+                <div class="diagram-container">
+                    <div class="diagram-placeholder" style="display: block; height: auto;">
+                        <div style="text-align: center;">
+                            <img src="/images/Chatcluster-DB-Schema.png" alt="Database Schema Diagram"
+                                style="max-width: 100%; height: auto;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Flow -->
+            <div class="project-section">
+                <h2>Data Flow</h2>
+                <div class="diagram-container">
+                    <div class="diagram-placeholder" style="display: block; height: auto;">
+                        <div style="text-align: center;">
+                            <img src="/images/chatClusterDataFlow.png" alt="Data Flow Diagram"
+                                style="max-width: 100%; height: auto;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenges & Solutions -->
+            <div class="project-section">
+                <h2>Technical Decisions & Architecture Rationale</h2>
+
+                <!-- Q1 -->
+                <div
+                    style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 1.5rem;">
+                    <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">
+                        Q1: Why Socket.IO instead of raw WebSockets?
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">
+                        Socket.IO is a real-time communication library built on top of WebSockets that provides
+                        reliability features required in production systems.
+                    </p>
+                    <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">
+                        <strong>Decision Rationale:</strong> While raw WebSockets offer low-level control, they require
+                        significant custom logic for reconnections,
+                        fallbacks, authentication, and event handling.
+                    </p>
+                    <ul style="color: var(--text-secondary); padding-left: 1.2rem;">
+                        <li>Automatic reconnection handling</li>
+                        <li>Fallback support for restrictive networks</li>
+                        <li>Built-in authentication middleware</li>
+                        <li>Event-driven communication model</li>
+                        <li>Room-based message broadcasting</li>
+                    </ul>
+                    <p style="color: var(--text-secondary); margin-top: 0.5rem;">
+                        <strong>Impact:</strong> Reduced connection failures from ~15% to 99.7% success rate and
+                        eliminated over 300 lines of custom retry logic.
+                    </p>
+                </div>
+
+                <!-- Q2 -->
+                <div
+                    style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 1.5rem;">
+                    <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">
+                        Q2: Why MongoDB instead of SQL databases?
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">
+                        MongoDB is a document-oriented NoSQL database that stores data in flexible JSON-like structures.
+                    </p>
+                    <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">
+                        <strong>Decision Rationale:</strong> Chat messages are naturally independent documents and
+                        benefit from flexible schemas as features evolve.
+                    </p>
+                    <ul style="color: var(--text-secondary); padding-left: 1.2rem;">
+                        <li>Schema flexibility for evolving message formats</li>
+                        <li>Document model aligns with chat message structure</li>
+                        <li>Efficient reads with embedded data</li>
+                        <li>Horizontal scalability for high message volume</li>
+                    </ul>
+                    <p style="color: var(--text-secondary); margin-top: 0.5rem;">
+                        SQL databases were intentionally avoided as strict schemas and complex transactions were
+                        unnecessary for this use case.
+                    </p>
+                </div>
+
+                <!-- Q3 -->
+                <div
+                    style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 1.5rem;">
+                    <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">
+                        Q3: Why use Nginx for the frontend container?
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">
+                        Nginx is a high-performance web server optimized for serving static assets efficiently.
+                    </p>
+                    <p style="color: var(--text-secondary);">
+                        <strong>Decision Rationale:</strong> Using Nginx allows the React build to be served with
+                        minimal resource usage,
+                        better caching, and improved request handling compared to a Node.js-based static server.
+                    </p>
+                </div>
+
+                <!-- Q4 -->
+                <div
+                    style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 1.5rem;">
+                    <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">
+                        Q4: Why Kubernetes Services are not defined separately?
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">
+                        Kubernetes Services provide stable networking and discovery for Pods.
+                    </p>
+                    <p style="color: var(--text-secondary);">
+                        <strong>Decision Rationale:</strong> Services are tightly coupled with their deployments in this
+                        project,
+                        so they are defined together for atomic deployments, simpler management, and reduced
+                        configuration overhead.
+                    </p>
+                </div>
+
+                <!-- Q5 -->
+                <div
+                    style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 1.5rem;">
+                    <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">
+                        Q5: Why JWTs in HTTP-only cookies instead of localStorage?
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">
+                        JWTs can be stored in multiple locations on the client, each with different security
+                        implications.
+                    </p>
+                    <p style="color: var(--text-secondary);">
+                        <strong>Decision Rationale:</strong> HTTP-only cookies prevent JavaScript access, protecting
+                        tokens from XSS attacks
+                        while enabling secure, automatic transmission with each request.
+                    </p>
+                </div>
+
+                <!-- Q6 -->
+                <div
+                    style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 1.5rem;">
+                    <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">
+                        Q6: Why separate .env and .env.docker files?
+                    </h4>
+                    <p style="color: var(--text-secondary);">
+                        Environment variables differ between local development and containerized deployments.
+                        Separating them improves security, clarity, and avoids configuration leaks across environments.
+                    </p>
+                </div>
+
+                <!-- Q7 -->
+                <div
+                    style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 1.5rem;">
+                    <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">
+                        Q7: Why Express.js over Fastify or NestJS?
+                    </h4>
+                    <p style="color: var(--text-secondary);">
+                        Express.js offers a minimal, flexible architecture with a mature ecosystem.
+                        For this project, it provided the right balance between simplicity and production readiness
+                        without the overhead of more opinionated frameworks.
+                    </p>
+                </div>
+
+                <!-- Q8 -->
+                <div
+                    style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                    <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">
+                        Q8: Why database transactions were not implemented?
+                    </h4>
+                    <p style="color: var(--text-secondary);">
+                        Chat messages are atomic and idempotent operations.
+                        Eventual consistency is acceptable, making database transactions unnecessary and avoiding
+                        the overhead of replica-set requirements.
+                    </p>
+                </div>
+            </div>
+
+
+            <div style="margin-top:2rem;">
+                <h2 style="font-size:1.6rem; font-weight:700; margin-bottom:1rem;">
+                    Deployment Cost & Capacity Summary
+                </h2>
+
+                <ul style="color:#9ca3af; margin:0 0 1.5rem 1.2rem; line-height:1.6;">
+                    <li><strong style="color:#e5e7eb;">Local development:</strong> Minikube — $0 (single-node,
+                        non-production)</li>
+                    <li><strong style="color:#e5e7eb;">Estimated cloud cost:</strong> ~<strong
+                            style="color:#ffffff;">$180/month</strong> (3× t3.medium, MongoDB Atlas M10, LB, storage,
+                        bandwidth)</li>
+                    <li><strong style="color:#e5e7eb;">Node capacity:</strong> 4096Mi RAM · 2000m CPU</li>
+                    <li><strong style="color:#e5e7eb;">Backend pod limits:</strong> 512Mi RAM · 500m CPU</li>
+                    <li><strong style="color:#e5e7eb;">Practical capacity:</strong> ~<strong style="color:#ffffff;">3
+                            backend pods per node</strong> (system buffer)</li>
+                </ul>
+
+                <div style="background:#0f172a; border:1px solid #1e293b; border-radius:10px; padding:1rem 1.2rem;">
+                    <div style="font-weight:600; margin-bottom:0.6rem; color:#e5e7eb;">
+                        Capacity Calculation
+                    </div>
+                    <code
+                        style="display:block; color:#cbd5f5; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:0.9rem; line-height:1.5;">
+                    Memory: 4096Mi ÷ 512Mi = 8 pods<br/>
+                    CPU: 2000m ÷ 500m = 4 pods<br/>
+                    Max per node = min(8, 4) = 4<br/>
+                    Reserve for OS/kubelet → <strong>3 pods per node</strong><br/><br/>
+                    Estimated total cost ≈ <strong>$180/month</strong> (1k–5k active users)
+                    </code>
+                </div>
+            </div>
+
+
+
+            <!-- Project Links -->
+            <div
+                style="margin-top: 3rem; padding: 2rem; background: var(--bg-secondary); border-radius: 12px; border: 1px solid var(--border-color); text-align: center;">
+                <h3 style="margin-bottom: 1.5rem;">Check Out the Project</h3>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <!-- <a href="#" class="btn btn-primary" target="_blank">Live Demo</a> -->
+                    <a href="https://github.com/AdeshGhadage/chatapp-cluster" class="btn btn-secondary"
+                        target="_blank">GitHub Repository</a>
+                    <!-- <a href="#" class="btn btn-secondary" target="_blank">Documentation</a> -->
+                </div>
+            </div>
+
+            <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+                <a href="../index.html#projects" class="back-link">← Back to Projects</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Adesh Ghadage. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>
