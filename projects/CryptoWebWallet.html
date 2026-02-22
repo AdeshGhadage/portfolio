@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Name - Portfolio</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <!-- <a href="../index.html" class="logo">AG</a> -->
+            <ul class="nav-links">
+                <li><a href="../index.html#home" class="nav-link">Home</a></li>
+                <li><a href="../index.html#about" class="nav-link">About</a></li>
+                <li><a href="../index.html#projects" class="nav-link active">Projects</a></li>
+                <li><a href="../blog.html" class="nav-link">Blog</a></li>
+                <li><a href="../index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <button class="menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Project Detail -->
+    <section class="project-detail">
+        <div class="container">
+            <a href="../index.html#projects" class="back-link">← Back to Projects</a>
+
+            <h1 class="page-title">CryptoWebWallet</h1>
+
+            <div class="project-overview">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                    <div>
+                        <span class="project-status">Completed</span>
+                        <span style="margin-left:1rem; color:var(--text-secondary);">📅 July’24 - Sep’24</span>
+                    </div>
+                    <div style="display:flex; gap:1rem;">
+                        <a href="https://github.com/AdeshGhadage/CryptoWebWallet" class="btn btn-secondary"
+                            target="_blank">GitHub</a>
+                    </div>
+                </div>
+
+                <p style="color:var(--text-secondary); font-size:1.05rem; line-height:1.7;">
+                    A focused learning project that implements a minimal wallet for testnets/devnets to explore
+                    the cryptographic and blockchain principles behind how wallets, addresses and transactions work.
+                    <strong>Educational only — not for real funds.</strong>
+                </p>
+
+                <div class="project-tags" style="margin-top:1rem;">
+                    <span class="tag">Web3 Concepts</span>
+                    <span class="tag">Cryptography</span>
+                    <span class="tag">Wallet Mechanics</span>
+                    <span class="tag">Blockchain</span>
+                </div>
+            </div>
+
+            <!-- Educational content -->
+            <div class="project-section">
+                <h2>Why this project — in plain words</h2>
+                <p style="color:var(--text-secondary);">
+                    Wallets are the user-facing layer of blockchains: they hold the keys, create transactions, and talk
+                    to the network.
+                    Building a wallet from scratch (for testnets) forces you to turn textbook ideas into real dataflows
+                    — seed phrases,
+                    keys, signatures, RPCs and transaction formats — so the abstractions stop being words and start
+                    being working pieces.
+                </p>
+            </div>
+
+            <div class="project-section">
+                <h2>Core concepts I explain here (and why they exist)</h2>
+
+                <h3>Seed phrases &amp; BIP39 — what they do and why</h3>
+                <p style="color:var(--text-secondary);">
+                    A seed phrase (12 or 24 words under the BIP39 standard) is a human-friendly representation of a
+                    large random number.
+                    Why words? Humans can copy and back up a short list more reliably than a long hex string. Behind the
+                    words is a deterministic
+                    binary seed — one seed that can deterministically produce every private key for a wallet. This is
+                    powerful because:
+                </p>
+                <ul style="color:var(--text-secondary); margin:0.5rem 0 1rem 1.5rem;">
+                    <li>One backup (the mnemonic) recovers many addresses — convenient and safer for users.</li>
+                    <li>The standard adds checks so accidental typos are less likely to produce a valid, different
+                        wallet.</li>
+                </ul>
+
+                <h3>Public / Private keys — why they are secure</h3>
+                <p style="color:var(--text-secondary);">
+                    Public-private key cryptography is asymmetric: a private key can create signatures, and the
+                    corresponding public key verifies them.
+                    The security comes from mathematical functions that are easy to compute in one direction (derive the
+                    public key or sign a message)
+                    but infeasible to invert (recover the private key from the public key). For modern blockchains,
+                    these functions use elliptic curves
+                    (for example Ed25519 or secp256k1) which are chosen because:
+                </p>
+                <ul style="color:var(--text-secondary); margin:0.5rem 0 1rem 1.5rem;">
+                    <li>The operations are computationally cheap — good for wallets and nodes.</li>
+                    <li>They have strong, well-studied hardness assumptions that make private-key recovery infeasible
+                        with current technology.</li>
+                </ul>
+                <p style="color:var(--text-secondary);">
+                    In practical terms: as long as a private key stays secret, nobody can create valid signatures that
+                    look like they came from you.
+                    That’s the heart of custody: <em>whoever controls the private keys controls the assets</em>.
+                </p>
+
+                <h3>Digital signatures — how they protect transactions</h3>
+                <p style="color:var(--text-secondary);">
+                    A signature proves two things: the signer had the private key, and the signed data (transaction)
+                    wasn't tampered with.
+                    Wallets sign the transaction hash locally with the private key; then any node can verify the
+                    signature with the public key.
+                    This guarantees authenticity (it came from a key-holder) and integrity (the contents are unchanged).
+                </p>
+
+                <h3>HD wallets &amp; derivation paths — why deterministic wallets matter</h3>
+                <p style="color:var(--text-secondary);">
+                    HD (Hierarchical Deterministic) wallets use the seed to derive a tree of key pairs (BIP32/BIP44 are
+                    common standards).
+                    Instead of tracking many unrelated keys, a wallet can generate child keys for different accounts,
+                    coins, or purposes.
+                    The advantages:
+                </p>
+                <ul style="color:var(--text-secondary); margin:0.5rem 0 1rem 1.5rem;">
+                    <li>Single backup (seed) restores every address deterministically.</li>
+                    <li>Clear structure: you can separate coins, accounts, and change addresses with standardized paths.
+                    </li>
+                </ul>
+
+                <h3>Account-based vs UTXO models — design tradeoffs</h3>
+                <p style="color:var(--text-secondary);">
+                    Blockchains use different models for state and transactions:
+                </p>
+                <ul style="color:var(--text-secondary); margin:0.5rem 0 1rem 1.5rem;">
+                    <li><strong>Account-based (e.g., many smart-contract platforms):</strong> each address has a balance
+                        and you update state by sending transactions that modify those balances. This is intuitive and
+                        easy for smart contracts to interact with.</li>
+                    <li><strong>UTXO (used by Bitcoin):</strong> transactions consume unspent outputs and produce new
+                        outputs. This model naturally supports parallel verification, privacy patterns and simpler
+                        transaction validation rules.</li>
+                </ul>
+                <p style="color:var(--text-secondary);">
+                    Different models make different engineering trade-offs: account models are simpler for contracts;
+                    UTXO models are more flexible for privacy and concurrency.
+                </p>
+
+                <h3>Blockchain APIs &amp; RPCs — how wallets talk to networks</h3>
+                <p style="color:var(--text-secondary);">
+                    Wallets use RPC endpoints to ask nodes for balances, broadcast signed transactions, and fetch
+                    history. RPCs are plain HTTP/JSON (or WebSocket) interfaces
+                    that expose node capabilities. The wallet stays light by delegating chain sync and heavy lifting to
+                    full nodes — but this requires trusting node responses
+                    (so many wallets validate critical data locally when possible).
+                </p>
+
+                <h3>Why networks differ (briefly comparing two common design choices)</h3>
+                <p style="color:var(--text-secondary);">
+                    Different chains make different choices about cryptography, transaction throughput, fee models and
+                    account semantics — those choices shape how wallets are built.
+                    For example, design decisions around signature schemes, smallest units (like lamports or wei), and
+                    confirmation strategies all affect UX, performance and safety.
+                </p>
+            </div>
+
+            <div class="project-section">
+                <h2>Uses — what wallets enable</h2>
+                <ul style="color:var(--text-secondary); margin:1rem 0 1.5rem 1.5rem;">
+                    <li>Manage keys and addresses for sending/receiving crypto</li>
+                    <li>Sign transactions locally so private keys never leave the user device</li>
+                    <li>Interact with smart contracts (approve, call functions) via signed messages</li>
+                    <li>Support multiple chains or accounts from one seed using deterministic derivation</li>
+                    <li>Provide UX features: address labeling, transaction history, and fee control</li>
+                </ul>
+            </div>
+
+            <div class="project-section">
+                <h2>Practical lessons &amp; safety notes</h2>
+                <p style="color:var(--text-secondary);">
+                    The strongest lessons were practical: seed phrases are powerful — one phrase recovers everything —
+                    so backup and secrecy are critical.
+                    Never reuse testnet keys for real funds; always assume code you build for learning needs security
+                    reviews before production.
+                </p>
+
+                <h3>Takeaways (short)</h3>
+                <ul style="color:var(--text-secondary); margin:0.5rem 0 1rem 1.5rem;">
+                    <li>Cryptography gives the guarantees: authenticity, integrity, and non-repudiation.</li>
+                    <li>Deterministic wallets trade convenience for the need to protect a single powerful secret.</li>
+                    <li>Different blockchain architectures shape wallet design and UX.</li>
+                    <li>Building a wallet is the best way to move from concepts to clear, testable implementations.</li>
+                </ul>
+            </div>
+
+            <div
+                style="margin-top:2.5rem; padding:1.5rem; background:var(--bg-secondary); border-radius:10px; border:1px solid var(--border-color); text-align:center;">
+                <h3 style="margin-bottom:0.75rem;">Note</h3>
+                <p style="color:var(--text-secondary);">
+                    This project is for learning only — all networks used were testnets/devnets. Never use these builds
+                    for real funds and always follow production-level security best practices.
+                </p>
+                <a href="https://github.com/AdeshGhadage/CryptoWebWallet" class="btn btn-secondary" target="_blank">View
+                    the repository</a>
+            </div>
+
+            <div style="margin-top:2.5rem; padding-top:2rem; border-top:1px solid var(--border-color);">
+                <a href="../index.html#projects" class="back-link">← Back to Projects</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Adesh Ghadage. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>

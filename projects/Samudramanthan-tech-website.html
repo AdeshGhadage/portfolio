@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Name - Portfolio</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="../index.html" class="logo">AG</a>
+            <ul class="nav-links">
+                <li><a href="../index.html#home" class="nav-link">Home</a></li>
+                <li><a href="../index.html#about" class="nav-link">About</a></li>
+                <li><a href="../index.html#projects" class="nav-link active">Projects</a></li>
+                <li><a href="../blog.html" class="nav-link">Blog</a></li>
+                <li><a href="../index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <button class="menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Project Detail -->
+    <section class="project-detail">
+        <div class="container">
+            <a href="../index.html#projects" class="back-link">← Back to Projects</a>
+
+            <h1 class="page-title">Samudramathan Tech Fest Website</h1>
+
+            <!-- Project Overview -->
+            <div class="project-overview">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <div>
+                        <span class="project-status">Completed</span>
+                        <span style="margin-left: 1rem; color: var(--text-secondary);">📅 Dec 2023 – Feb 2024</span>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <!-- <a href="#" class="btn btn-primary" target="_blank">View Live</a> -->
+                        <a href="https://github.com/AdeshGhadage/samudramathan" class="btn btn-secondary"
+                            target="_blank">GitHub</a>
+                        <a href="https://www.youtube.com/watch?v=qNULu-YWOAw" class="btn btn-secondary"
+                            target="_blank">Youtube</a>
+                    </div>
+                </div>
+                <p style="color: var(--text-secondary); font-size: 1.1rem; line-height: 1.8;">
+                    The official website for Samudramathan Tech Fest, showcasing event details, schedules, and
+                    participant information. Built with a focus on responsive design and user engagement.
+                </p>
+                <div class="project-tags" style="margin-top: 1.5rem;">
+                    <span class="tag">React</span>
+                    <span class="tag">Node.js</span>
+                    <span class="tag">MongoDB</span>
+                    <span class="tag">Express</span>
+                    <span class="tag">REST API</span>
+                </div>
+            </div>
+
+            <!-- Problem Statement -->
+
+            <div class="project-section">
+                <h2>Problem Statement</h2>
+                <p style="color: var(--text-secondary); line-height:1.8;">
+                    The tech fest required a centralized digital platform to manage participant registrations,
+                    event enrollments, secure payments, merchandise purchases, and campus ambassador applications.
+                    Previously, manual coordination created inefficiencies and payment tracking risks.
+                    <br><br>
+                    The system needed to handle real monetary transactions securely while ensuring a smooth
+                    user experience for a large student audience.
+                </p>
+            </div>
+
+            <!-- Solution -->
+
+            <div class="project-section">
+                <h2>Solution & Key Features</h2>
+
+                <ul style="color: var(--text-secondary); margin: 1rem 0 1.5rem 2rem; line-height:1.8;">
+                    <li>🔐 Secure authentication & session-based user management</li>
+                    <li>🎟️ Event registration system with structured database relations</li>
+                    <li>💳 Razorpay payment gateway integration for secure transactions</li>
+                    <li>🧾 Automated SM ID generation after successful payment</li>
+                    <li>👕 Merchandise (T-shirt) purchase module</li>
+                    <li>🎓 Campus Ambassador (CAP) registration portal</li>
+                    <li>📊 Admin-friendly structured backend APIs</li>
+                </ul>
+
+                <p style="color: var(--text-secondary);">
+                    The application was designed as a <strong>monolithic architecture</strong>
+                    considering the expected audience scale. This ensured faster development,
+                    easier deployment, and simplified maintenance without unnecessary complexity.
+                </p>
+            </div>
+
+            <!-- System Architecture -->
+
+            <div class="project-section">
+                <h2>System Architecture</h2>
+
+                <p style="color: var(--text-secondary); line-height:1.8;">
+                    The system follows a monolithic architecture:
+                </p>
+
+                <div class="diagram-container">
+                    <div class="diagram-placeholder">
+                        <div style="text-align: center;">
+                            <img src="../images/samudramanthan-archi.png" alt="System Architecture Diagram"
+                                style="max-width: 100%; height: auto;">
+                        </div>
+                    </div>
+                </div>
+
+                <p style="color: var(--text-secondary);">
+                    Azure was used for backend hosting to ensure reliability and scalability,
+                    while Vercel provided optimized frontend deployment with global CDN.
+                </p>
+            </div>
+
+            <!-- Technical Implementation -->
+
+            <div class="project-section">
+                <h2>Technical Implementation</h2>
+
+                <h3 style="margin-top:1.5rem;">Frontend</h3>
+                <p style="color: var(--text-secondary);">
+                    Built using React.js with reusable components and responsive design.
+                    Focused on optimized rendering, form validations, and seamless UX for payment flows.
+                </p>
+
+                <pre style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; overflow-x: auto;">
+<code>
+const handlePayment = async () => {
+  const response = await axios.post("/api/payment/create-order");
+
+  const options = {
+    key: process.env.REACT_APP_RAZORPAY_KEY,
+    amount: response.data.amount,
+    order_id: response.data.id,
+    handler: async function (paymentResponse) {
+      await axios.post("/api/payment/verify", paymentResponse);
+    },
+  };
+
+  const rzp = new window.Razorpay(options);
+  rzp.open();
+};
+</code>
+</pre>
+
+                <h3 style="margin-top:2rem;">Backend</h3>
+                <p style="color: var(--text-secondary);">
+                    Developed RESTful APIs using Node.js and Express.
+                    Implemented authentication, event registration logic,
+                    secure payment verification, and database indexing.
+                </p>
+
+                <pre style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; overflow-x: auto;">
+<code>
+app.post("/api/payment/verify", async (req, res) => {
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+
+  const generated_signature = crypto
+    .createHmac("sha256", process.env.RAZORPAY_SECRET)
+    .update(razorpay_order_id + "|" + razorpay_payment_id)
+    .digest("hex");
+
+  if (generated_signature === razorpay_signature) {
+    // Update DB, generate SM ID
+    return res.status(200).json({ success: true });
+  }
+
+  res.status(400).json({ success: false });
+});
+</code>
+</pre>
+
+            </div>
+
+            <!-- System Design & Responsibility -->
+
+            <div class="project-section">
+                <h2>Ownership & System Design Thinking</h2>
+
+                <ul style="color: var(--text-secondary); margin: 1rem 0 1.5rem 2rem; line-height:1.8;">
+                    <li>Designed complete database schema for Users, Events, Registrations, Payments</li>
+                    <li>Chose monolithic structure intentionally for faster deployment & maintainability</li>
+                    <li>Handled real payment transactions securely (₹2+ lakh processed)</li>
+                    <li>Managed production deployment (Azure + Vercel)</li>
+                    <li>Ensured secure environment variables and payment verification flow</li>
+                    <li>Delivered full project lifecycle independently in 3 months</li>
+                </ul>
+
+                <p style="color: var(--text-secondary);">
+                    This project demonstrates my ability to take full responsibility —
+                    from requirement gathering to deployment — and deliver a real-world,
+                    revenue-generating system.
+                </p>
+            </div>
+
+            <!-- Key Learnings -->
+
+            <div class="project-section">
+                <h2>Key Learnings</h2>
+                <ul style="color: var(--text-secondary); margin: 1rem 0 1.5rem 2rem;">
+                    <li>Production-level payment gateway integration</li>
+                    <li>Cloud deployment & environment configuration</li>
+                    <li>Scalable backend API design</li>
+                    <li>Real-world database modeling</li>
+                    <li>Handling real financial transactions securely</li>
+                    <li>End-to-end product ownership</li>
+                </ul>
+            </div>
+
+            <!-- Impact -->
+
+            <div class="project-section">
+                <h2>Impact</h2>
+                <p style="color: var(--text-secondary); line-height:1.8;">
+                    Successfully deployed for a live college tech fest audience.
+                    <br>
+                    Processed ₹2+ lakh in registration revenue.
+                    <br>
+                    Enabled seamless digital registration for participants.
+                    <br>
+                    Reduced manual coordination effort significantly.
+                </p>
+            </div>
+
+            <!-- Project Links -->
+            <div
+                style="margin-top: 3rem; padding: 2rem; background: var(--bg-secondary); border-radius: 12px; border: 1px solid var(--border-color); text-align: center;">
+                <h3 style="margin-bottom: 1.5rem;">Check Out the Project</h3>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="https://github.com/AdeshGhadage/samudramathan" class="btn btn-secondary"
+                        target="_blank">GitHub Repository</a>
+                    <a href="https://www.youtube.com/watch?v=qNULu-YWOAw" class="btn btn-secondary"
+                        target="_blank">Youtube</a>
+                </div>
+            </div>
+
+            <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+                <a href="../index.html#projects" class="back-link">← Back to Projects</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Adesh Ghadage. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>
