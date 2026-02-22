@@ -32,11 +32,101 @@ body {
     color: var(--text-primary);
     line-height: 1.6;
     overflow-x: hidden;
+    cursor: none;
+}
+
+/* ======================
+   Visual Interactions
+   ====================== */
+
+/* Custom cursor */
+.cursor-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--accent-primary);
+    border-radius: 50%;
+    position: fixed;
+    top: -4px;
+    left: -4px;
+    pointer-events: none;
+    z-index: 99999;
+    transition: opacity 0.3s, width 0.2s, height 0.2s, background 0.2s;
+    will-change: transform;
+}
+
+.cursor-ring {
+    width: 36px;
+    height: 36px;
+    border: 1.5px solid rgba(99,102,241,0.6);
+    border-radius: 50%;
+    position: fixed;
+    top: -18px;
+    left: -18px;
+    pointer-events: none;
+    z-index: 99998;
+    transition: opacity 0.3s, width 0.3s, height 0.3s, border-color 0.3s;
+    will-change: transform;
+}
+
+.cursor-dot.cursor-hover {
+    width: 14px;
+    height: 14px;
+    top: -7px;
+    left: -7px;
+    background: var(--accent-secondary);
+}
+
+.cursor-ring.cursor-hover {
+    width: 52px;
+    height: 52px;
+    top: -26px;
+    left: -26px;
+    border-color: rgba(139,92,246,0.5);
+}
+
+/* Page spotlight */
+.page-spotlight {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    transition: background 0.08s ease;
+}
+
+/* Click ripple */
+.click-ripple {
+    position: fixed;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(99,102,241,0.6);
+    transform: translate(-50%, -50%) scale(0);
+    pointer-events: none;
+    z-index: 99997;
+    animation: rippleOut 0.6s ease-out forwards;
+}
+
+@keyframes rippleOut {
+    to {
+        transform: translate(-50%, -50%) scale(20);
+        opacity: 0;
+    }
+}
+
+/* Restore cursor on touch/mobile */
+@media (hover: none) {
+    body { cursor: auto; }
+    .cursor-dot, .cursor-ring { display: none; }
 }
 
 a {
     text-decoration: none;
     color: inherit;
+    cursor: none;
+}
+
+button {
+    cursor: none;
 }
 
 /* ======================
@@ -142,6 +232,8 @@ a {
     align-items: center;
     justify-content: space-between;
     gap: 4rem;
+    position: relative;
+    z-index: 2;
 }
 
 .hero-content {
