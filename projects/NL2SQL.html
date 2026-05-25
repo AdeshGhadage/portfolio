@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NL2SQL Workflow System - Portfolio</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <!-- <a href="../index.html" class="logo">AG</a> -->
+            <ul class="nav-links">
+                <li><a href="../index.html#home" class="nav-link">Home</a></li>
+                <li><a href="../index.html#about" class="nav-link">About</a></li>
+                <li><a href="../index.html#projects" class="nav-link active">Projects</a></li>
+                <li><a href="../blog.html" class="nav-link">Blog</a></li>
+                <li><a href="../index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <button class="menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Project Detail -->
+    <section class="project-detail">
+        <div class="container">
+            <a href="../index.html#projects" class="back-link">← Back to Projects</a>
+
+            <h1 class="page-title">NL2SQL Workflow System</h1>
+
+            <!-- Project Overview -->
+            <div class="project-overview">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <div>
+                        <span class="project-status">Completed</span>
+                        <span style="margin-left: 1rem; color: var(--text-secondary);">📅 May 2026</span>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <!-- <a href="#" class="btn btn-primary" target="_blank">Live Demo</a> -->
+                        <a href="https://github.com/AdeshGhadage/NL2SQL" class="btn btn-secondary" target="_blank">GitHub</a>
+                    </div>
+                </div>
+                <p style="color: var(--text-secondary); font-size: 1.1rem; line-height: 1.8;">
+                    NL2SQL Workflow System is an LLM-assisted data analysis app that turns plain-English
+                    questions into SQL for SQLite, CSV, and Excel data sources. It validates schemas,
+                    generates and refines SQL, executes read-only queries safely, explains the results,
+                    and can produce chart code when visual output is useful.
+                </p>
+                <div class="project-tags" style="margin-top: 1.5rem;">
+                    <span class="tag">Python</span>
+                    <span class="tag">Streamlit</span>
+                    <span class="tag">SQLite</span>
+                    <span class="tag">Pandas</span>
+                    <span class="tag">LLM</span>
+                </div>
+            </div>
+
+            <!-- Problem Statement -->
+            <div class="project-section">
+                <h2>Problem Statement</h2>
+                <p>
+                    Non-technical users often want answers from structured data without learning SQL,
+                    understanding schema details, or manually writing queries. At the same time, naïve
+                    text-to-SQL tools can generate invalid, unsafe, or misleading queries when values and
+                    column names do not exactly match the dataset.
+                </p>
+                <p>
+                    This project addresses that gap by combining schema extraction, LLM generation,
+                    value matching, SQL refinement, safe execution, and result explanation in one workflow.
+                </p>
+            </div>
+
+            <!-- Solution -->
+            <div class="project-section">
+                <h2>Solution</h2>
+                <p>
+                    I built a Streamlit application that guides the user from question to answer through a
+                    staged workflow. The app reads the uploaded file, builds schema context, asks the LLM for
+                    SQL, improves the query using fuzzy value matching, runs the final statement safely, and
+                    then summarizes the output in plain language.
+                </p>
+                <ul style="color: var(--text-secondary); margin: 1rem 0 1.5rem 2rem;">
+                    <li>Schema ingestion for SQLite, CSV, and Excel inputs</li>
+                    <li>LLM-based SQL generation from natural-language questions</li>
+                    <li>Entity extraction and fuzzy value matching for better query accuracy</li>
+                    <li>Read-only execution, result analysis, and chart generation</li>
+                </ul>
+            </div>
+
+            <!-- Architecture Diagram -->
+            <div class="project-section">
+                <h2>System Architecture</h2>
+                <p>
+                    The system is organized as a pipeline so each step has a clear responsibility.
+                    That separation makes the workflow easier to debug, extend, and explain.
+                </p>
+                <div class="diagram-container">
+                    <div class="diagram-placeholder" style="height: fit-content;">
+                        <div style="text-align: center;">
+                            <img src="../images/NL2SQL-Archi.png" alt="System Architecture Diagram"
+                                style="max-width: 100%; height: auto;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technical Implementation -->
+            <div class="project-section">
+                <h2>Technical Implementation</h2>
+                <h3 style="font-size: 1.3rem; margin-top: 1.5rem; margin-bottom: 1rem;">UI and Workflow</h3>
+                <p>
+                    The UI is implemented in Streamlit so the workflow stays simple and interactive.
+                    The user can upload a file, enter an API key, ask a question, and inspect each stage
+                    of the pipeline without leaving the page.
+                </p>
+                <pre
+                    style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; overflow-x: auto; margin: 1rem 0;"><code># High-level workflow
+file -> schema extraction -> prompt assembly -> SQL generation
+         -> value matching -> SQL refinement -> safe execution
+         -> result table -> LLM summary -> chart code generation</code></pre>
+
+                <h3 style="font-size: 1.3rem; margin-top: 2rem; margin-bottom: 1rem;">Engine Modules</h3>
+                <p>
+                    The core logic is split into focused modules under the engine folder. Each module
+                    handles one stage of the workflow, which keeps the codebase easier to maintain and
+                    easier to test.
+                </p>
+                <ul style="color: var(--text-secondary); margin: 1rem 0 1.5rem 2rem;">
+                    <li>schema_engine.py: reads uploaded files and extracts table structure</li>
+                    <li>generator.py: asks the LLM to generate SQL from question + schema</li>
+                    <li>entity_extractor.py: identifies table, column, and value references</li>
+                    <li>value_matcher.py and utils/search.py: find close matches for values</li>
+                    <li>refiner.py: rewrites SQL with matched values when needed</li>
+                    <li>executor.py: runs read-only SQL and returns rows</li>
+                    <li>analyzer.py and visualizer.py: summarize results and create chart code</li>
+                </ul>
+
+                <h3 style="font-size: 1.3rem; margin-top: 2rem; margin-bottom: 1rem;">Safety and Validation</h3>
+                <p>
+                    The executor is designed for read-only analysis so the app does not modify the source
+                    data. The workflow also tries to correct mismatched literals before execution, which makes
+                    the final SQL more robust against imperfect LLM output.
+                </p>
+            </div>
+
+            <!-- Data Flow -->
+            <div class="project-section">
+                <h2>Data Flow</h2>
+                <p>
+                    Data flows from the uploaded source into schema extraction, then into prompt building for
+                    the LLM, then through query refinement and execution, and finally into the result table,
+                    natural-language summary, and optional chart output.
+                </p>
+                <div class="diagram-container">
+                    <div class="diagram-placeholder" style="height: fit-content;">
+                        <div style="text-align: center;">
+                            <img src="../images/NL2SQL-data.png" alt="Data Flow Diagram" style="max-width: 100%;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenges & Solutions -->
+            <div class="project-section">
+                <h2>Challenges & Solutions</h2>
+                <div
+                    style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 1.5rem;">
+                    <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">Challenge 1: Inexact values in
+                        LLM-generated SQL</h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">
+                        LLMs often produce valid-looking SQL with incorrect literal values or slightly wrong column
+                        references.
+                    </p>
+                    <p style="color: var(--text-secondary);">
+                        <strong>Solution:</strong> Added entity extraction and fuzzy matching so the workflow can map
+                        user intent
+                        to the nearest values in the dataset before execution.
+                    </p>
+                </div>
+
+                <div
+                    style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 1.5rem;">
+                    <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">Challenge 2: Safe execution of
+                        generated SQL</h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">
+                        Generated queries must not modify the source data or access unsupported operations.
+                    </p>
+                    <p style="color: var(--text-secondary);">
+                        <strong>Solution:</strong> Restricted execution to read-only analysis queries and organized the
+                        app so each stage
+                        can be inspected before the final query runs.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Key Learnings -->
+            <div class="project-section">
+                <h2>Key Learnings</h2>
+                <ul style="color: var(--text-secondary); margin: 1rem 0 1.5rem 2rem;">
+                    <li>Learned how to structure a multi-step LLM workflow instead of a single prompt call</li>
+                    <li>Improved my understanding of schema extraction and SQL generation pitfalls</li>
+                    <li>Practiced fuzzy matching and value normalization for messy real-world data</li>
+                    <li>Gained experience designing a safe, read-only query pipeline</li>
+                    <li>Understood how to connect analysis, explanation, and visualization in one app</li>
+                </ul>
+            </div>
+
+            <!-- Future Improvements -->
+            <div class="project-section">
+                <h2>Future Improvements</h2>
+                <ul style="color: var(--text-secondary); margin: 1rem 0 1.5rem 2rem;">
+                    <li>Add support for more file formats and larger datasets</li>
+                    <li>Improve chart selection with automatic visualization recommendations</li>
+                    <li>Add stronger SQL validation and error recovery</li>
+                    <li>Support multiple LLM providers and prompt strategies</li>
+                    <li>Add caching and test coverage for the workflow modules</li>
+                </ul>
+            </div>
+
+            <!-- Project Links -->
+            <div
+                style="margin-top: 3rem; padding: 2rem; background: var(--bg-secondary); border-radius: 12px; border: 1px solid var(--border-color); text-align: center;">
+                <h3 style="margin-bottom: 1.5rem;">Check Out the Project</h3>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <!-- <a href="#" class="btn btn-primary" target="_blank">Live Demo</a> -->
+                    <a href="https://github.com/AdeshGhadage/NL2SQL" class="btn btn-secondary" target="_blank">GitHub Repository</a>
+                    <a href="https://adeshghadage.github.io/NL2SQL/" class="btn btn-secondary" target="_blank">Documentation</a>
+                </div>
+            </div>
+
+            <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+                <a href="../index.html#projects" class="back-link">← Back to Projects</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Adesh Ghadage. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/interactions.js"></script>
+</body>
+
+</html>
