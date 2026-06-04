@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL vs NoSQL Databases: Storage, Indexes, and Row Versioning Explained - Blog</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <!-- <a href="../index.html" class="logo">AG</a> -->
+            <ul class="nav-links">
+                <li><a href="../index.html#home" class="nav-link">Home</a></li>
+                <li><a href="../index.html#about" class="nav-link">About</a></li>
+                <li><a href="../index.html#projects" class="nav-link">Projects</a></li>
+                <li><a href="../blog.html" class="nav-link active">Blog</a></li>
+                <li><a href="../index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <button class="menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Post Header -->
+    <header class="post-header">
+        <div class="container">
+            <a href="../blog.html" class="back-link">← Back to Blog</a>
+            <h1 class="page-title">SQL vs NoSQL Databases: Storage, Indexes, and Row Versioning Explained</h1>
+            <div class="post-meta">
+                <span>📅 June 4, 2026</span>
+                <span>⏱️ 15-20 min read</span>
+                <span>🏷️ SQL, NoSQL, Database Internals, MVCC</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Post Content -->
+    <article class="post-content">
+        <div class="container">
+            <h2>Introduction</h2>
+            <p>
+                Data is at the heart of every modern application, from social media platforms and online stores to
+                banking systems and healthcare software. To store, organise, and retrieve this data efficiently,
+                organisations rely on databases.
+            </p>
+            <p>
+                When discussing databases, two major categories often come up: SQL databases and NoSQL databases. While
+                both are designed to store and manage data, they do so in different ways and are suited for different
+                types of applications.
+            </p>
+            <p>
+                This guide explains SQL and NoSQL databases in simple terms, explores how they work behind the scenes,
+                and helps you understand when to choose one over the other.
+            </p>
+            <hr>
+            <h2>What Is a Database?</h2>
+            <p>
+                A database is an organised collection of data that allows applications to store, retrieve, update, and
+                manage information efficiently.
+            </p>
+
+            <p>For example:</p>
+            <ul>
+                <li>An e-commerce website stores customer information, products, and orders.</li>
+                <li>A banking application stores account details and transaction history.</li>
+                <li>A social media platform stores posts, comments, and user profiles.</li>
+            </ul>
+
+            <p>The database acts as the system that keeps all this information organised and accessible.</p>
+
+            <hr>
+            <h2>Understanding SQL Databases</h2>
+            <p>
+                SQL (Structured Query Language) databases are also known as relational databases because they organise
+                data into tables with rows and columns.
+            </p>
+            <p>
+                Popular SQL databases include:
+            </p>
+            <ul>
+                <li>PostgreSQL</li>
+                <li>MySQL</li>
+                <li>Oracle Database</li>
+                <li>Microsoft SQL Server</li>
+            </ul>
+
+            <h2>How Data Is Stored</h2>
+            <p>
+                In a relational database:
+            </p>
+            <ul>
+                <li>Data is stored in tables.</li>
+                <li>Each row represents a record.</li>
+                <li>Each column represents a specific attribute.</li>
+            </ul>
+            <p>Example: A users table in SQL database</p>
+
+            <table style="width: 100%; border-collapse: collapse; margin: 1.5rem 0;">
+                <thead>
+                    <tr style="background-color: var(--bg-tertiary);">
+                        <th style="border: 1px solid var(--border-color); padding: 0.75rem; text-align: left;">Customer
+                            ID</th>
+                        <th style="border: 1px solid var(--border-color); padding: 0.75rem; text-align: left;">Name</th>
+                        <th style="border: 1px solid var(--border-color); padding: 0.75rem; text-align: left;">Email
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="border: 1px solid var(--border-color); padding: 0.75rem;">101</td>
+                        <td style="border: 1px solid var(--border-color); padding: 0.75rem;">John</td>
+                        <td style="border: 1px solid var(--border-color); padding: 0.75rem;">john@example.com</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid var(--border-color); padding: 0.75rem;">102</td>
+                        <td style="border: 1px solid var(--border-color); padding: 0.75rem;">Sarah</td>
+                        <td style="border: 1px solid var(--border-color); padding: 0.75rem;">sarah@example.com</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>The structure of the table is defined beforehand using a schema.</p>
+            <hr>
+            <h2>Key Characteristics of SQL Databases</h2>
+            <h3>1. Fixed Schema</h3>
+            <p>
+                One of the key characteristics of SQL databases is their predefined schema. The database enforces rules
+                about the structure of the data, including which columns are present and the data type allowed in each
+                column. This ensures consistency across records. Later, we'll explore how NoSQL databases take a
+                different approach to managing data structure.
+            </p>
+
+
+            <p>This is why an update can look like this:</p>
+            <pre><code>CREATE TABLE Customer (
+    CustomerID INT PRIMARY KEY,
+    Name VARCHAR(100) NOT NULL,
+    Email VARCHAR(255) NOT NULL UNIQUE
+);
+</code></pre>
+
+            <h4>Benefits</h4>
+            <ul>
+                <li><strong>Consistent data structure:</strong> Every row follows the same format. If a column is
+                    defined as a number, only numeric values can be stored in it, ensuring consistency across the table.
+                </li>
+                <li><strong>Strong data validation:</strong> The database automatically enforces rules such as data
+                    types and constraints, reducing the chances of incorrect data being entered.</li>
+                <li><strong>Easier reporting and analytics:</strong> Because the data is structured and predictable,
+                    writing queries, generating reports, and performing analysis becomes much simpler.</li>
+            </ul>
+
+            <h4>Drawbacks</h4>
+            <ul>
+                <li><strong>Less flexibility:</strong> Since the schema is predefined, changing the structure of the
+                    database later can be challenging, especially when dealing with large amounts of data and existing
+                    applications that depend on that schema.</li>
+            </ul>
+
+            <h3>2. ACID Transactions </h3>
+            <h4>1. Atomicity</h4>
+            <p>A transaction either completes entirely or does not happen at all. There is no partial completion.For
+                example, suppose you transfer ₹100 from Person A's account to Person B's account. The transaction
+                involves two operations:</p>
+            <ul>
+                <li>1. Deduct ₹100 from Person A's account.</li>
+                <li>2. Add ₹100 to Person B's account.</li>
+            </ul>
+            <p>If either operation fails, the entire transaction is rolled back. The database ensures that you never end
+                up in a situation where money is deducted from A but not added to B.</p>
+            <h3>2. Consistency</h3>
+            <p>Consistency ensures that the database always remains in a valid state before and after a transaction.
+                For example, if a business rule states that an account balance cannot be negative, the database will
+                prevent a transaction that would violate that rule. If Person A has only ₹50, a transaction attempting
+                to transfer ₹100 will be rejected, keeping the data consistent.
+            </p>
+            <h3>3. Isolation</h3>
+            <p>Isolation ensures that multiple transactions running at the same time do not interfere with each other.
+            </p>
+            <p>For example, while one transaction is updating account balances or performing complex joins, another user
+                may still be able to read the previously committed version of the data. This prevents users from seeing
+                incomplete or partially updated information.</p>
+            <p>Modern databases use techniques such as locking and Multi-Version Concurrency Control (MVCC) to achieve
+                isolation. We will explore these mechanisms in more detail later in the blog.</p>
+            <h3>4. Durability</h3>
+            <p>Durability guarantees that once a transaction is committed, its changes are permanently stored and will
+                survive system crashes, power failures, or server restarts.</p>
+            <p>For example, after a successful money transfer is committed, the updated balances should remain intact
+                even if the database server crashes immediately afterward.</p>
+            <p>Databases achieve this using mechanisms such as Write-Ahead Logging (WAL), where changes are first
+                recorded in a log before being written to the actual data files. We will discuss WAL and durability in
+                greater depth later in this blog.</p>
+            <p>This makes SQL databases ideal for:</p>
+            <ul>
+                <li>Banking systems</li>
+                <li>Financial applications</li>
+                <li>Payment processing</li>
+                <li>Inventory management</li>
+            </ul>
+
+            <h2>3. Relationships Between Data</h2>
+            <p>
+                Relational databases are excellent at managing connected data. They can easily link related information,
+                such as customers, orders, and products, using relationships between tables, making them ideal for
+                applications with complex data connections.
+            </p>
+            <hr>
+
+            <h2>Internal Concepts in SQL Databases</h2>
+            <p>
+                Many beginners focus only on tables and queries, but several important mechanisms work behind the
+                scenes.
+            </p>
+            <img src="../images/mvcc-row-versioning-update.png" alt="Row versioning update">
+
+            <h3>Pages and Storage</h3>
+
+            <p>Relational databases store data in fixed-size blocks called pages, and each page can hold multiple rows
+                (also known as tuples). Instead of storing every row separately, grouping rows into pages makes disk
+                access and memory management more efficient.</p>
+            <p>As shown in Figure, a table is physically stored as a collection of pages, with each page containing
+                multiple tuples. This page-based organisation helps databases optimise storage usage and improve read
+                performance.</p>
+
+            <h3>Multi-Version Concurrency Control (MVCC)</h3>
+            <p>Modern relational databases such as PostgreSQL use Multi-Version Concurrency Control (MVCC) to handle
+                concurrent reads and writes efficiently.</p>
+            <p>PostgreSQL stores additional metadata with every row in the form of hidden system columns. Two important
+                system columns are xmin, which records the transaction that created the row version, and xmax, which
+                records the transaction that invalidated it. These columns are used internally by MVCC to determine
+                which version of a row should be visible to a transaction.</p>
+
+            <p>For example, in Figure, a row created by transaction 101 initially has xmax = NULL, indicating that it is
+                the active version. When transaction 110 updates the row:</p>
+            <ul>
+                <li>The original row's xmax is set to 110, indicating that transaction 110 replaced it.</li>
+                <li>A new row version is created with xmin = 110 and xmax = NULL, representing the updated and currently
+                    active version.</li>
+            </ul>
+            <p>The old version is not removed immediately because other transactions may still need to read it. This
+                behaviour allows the database to provide snapshot isolation, where each transaction sees a consistent
+                view of the data.</p>
+            <h3>Dead Tuples and Database Bloat</h3>
+            <p>As shown in Figure, when a row is updated, PostgreSQL does not overwrite the existing row. Instead, it
+                creates a new row version and marks the old version as no longer active by setting its xmax value.</p>
+            <p>Initially, the old row cannot be removed because some running transactions may still need to read it.
+                However, once there are no active transactions that can see that old row version, it becomes a
+                <strong>dead tuple</strong> (also called an expired row version).
+            </p>
+            <p>Over time, frequent updates and deletes can leave behind many dead tuples, consuming disk space and
+                reducing performance. This accumulation of unused row versions is known as <strong>database
+                    bloat</strong>.</p>
+
+            <h3>Automatic Cleanup (VACUUM)</h3>
+            <p>To prevent database bloat, PostgreSQL runs a background cleanup process called VACUUM.</p>
+            <p>VACUUM periodically scans pages and checks whether old row versions are still needed by any active
+                transaction. If there is no transaction whose snapshot can see a row version between its xmin and xmax,
+                that row version is considered dead and can be safely removed.
+            </p>
+            <p>For example:</p>
+            <img src="../images/mvcc-xmin-xmax-system-columns.png" alt="Row structure with xmin and xmax">
+            <p>If all transactions that started before transaction 110 have completed, this row version is no longer
+                visible to anyone, and VACUUM can reclaim its space</p>
+            <p>Benefits of VACUUM include:</p>
+            <ul>
+                <li>Recovering reusable storage space</li>
+                <li>Improving query performance</li>
+                <li>Reducing database bloat</li>
+                <li>Keeping tables and indexes efficient</li>
+            </ul>
+            <h3>Free Space Management</h3>
+            <p>After VACUUM removes dead tuples, PostgreSQL does not immediately return that space to the operating
+                system. Instead, it marks the freed locations as available for future inserts and updates.</p>
+            <p>The database tracks these available locations using a structure called the <strong>Free Space Map
+                    (FSM)</strong>.</p>
+            <p>A simplified view looks like this:</p>
+            <img src="../images/vacuum-dead-tuple-cleanup.png" alt="Before and after vacuum cleanup">
+
+            <h3>Hotel Front Desk Analogy</h3>
+            <p>A useful way to think about the Free Space Map is as a hotel's front desk.</p>
+            <ul>
+                <li>Each database page is like a hotel floor containing rooms.</li>
+                <li>Each row is like a guest occupying a room.</li>
+                <li>When a guest checks out, the room becomes vacant.</li>
+                <li>The front desk maintains a list of vacant rooms (the Free Space Map).</li>
+            </ul>
+            <p>When a new guest arrives, the hotel first checks its vacancy list and assigns an empty room. Only when
+                every room is occupied does the hotel build a new wing.</p>
+            <p>Similarly, when a new row is inserted, PostgreSQL first checks the Free Space Map for available slots. It
+                only allocates additional storage when no reusable space is available.</p>
+
+            <h3>Indexing in SQL Databases</h3>
+            <p>Now you know how data is stored inside pages and tuples. However, there is one problem: whenever a search
+                query is executed, the database cannot scan every page and every tuple to find the required row. That
+                approach would become extremely slow as the amount of data grows.</p>
+            <p>To solve this problem, databases use a specialized data structure called an index. Most relational
+                databases implement indexes using a <strong>B+ Tree</strong>, which allows the database to quickly
+                locate the required data without scanning the entire table.</p>
+
+            <p>The index does not usually store the complete row. Instead, it stores:</p>
+            <ul>
+                <li>The indexed value</li>
+                <li>A <strong>Tuple ID (TID)</strong> or <strong>Row ID (RID)</strong> that points to the row's physical
+                    location</li>
+            </ul>
+            <p>As shown in Figure, the TID contains information such as the page number and slot number where the tuple
+                is stored. When a query searches for a value, the database first traverses the <strong>B+ Tree</strong>
+                to find the corresponding TID. It then follows that pointer directly to the page and tuple containing
+                the actual data.</p>
+            <img src="../images/index-lookup-using-tid.png" alt="Index lookup using TID">
+            <p>This approach makes searches much faster because the database only needs to traverse the index and jump
+                directly to the required row instead of scanning every page in the table.</p>
+            <p>Benefits of B+ Trees:</p>
+            <ul>
+                <li>Fast lookups</li>
+                <li>Efficient range queries</li>
+                <li>Balanced performance for inserts, updates, and deletes</li>
+                <li>Scales well for large datasets</li>
+            </ul>
+            <p>This is why B+ Tree indexes are the default indexing structure in most relational databases.</p>
+            <hr>
+            <h2>Document Databases: A Common NoSQL Model</h2>
+            <p>Unlike relational databases, which store data in rows and columns, MongoDB stores data as documents in a
+                format called BSON (Binary JSON). A document is a self-contained data structure that can store related
+                information together, including nested objects and arrays.</p>
+            <img src="../images/mongodb-document-storage.png" alt="Document storage in pages">
+            <p>As shown in Figure, documents are still stored inside pages on disk, but unlike SQL rows, each document
+                can have a different size and structure. For example, a user document can contain fields such as name,
+                address, and an embedded list of orders, all within a single document.</p>
+            <p>One of the biggest advantages of MongoDB is its <strong>flexible schema</strong>. Documents within the
+                same collection do not need to have identical fields. For example, one document may contain only a name,
+                while another may contain a name, phone number, address, and orders. This flexibility makes it easier to
+                evolve the data model as application requirements change.</p>
+            <p>Because related data can be embedded directly inside a document, MongoDB often reduces the need for
+                complex joins that are common in relational databases. Operations are also <strong>atomic at the
+                    document level</strong>, meaning changes to a single document either succeed completely or fail
+                completely. These characteristics make document databases well-suited for applications with rapidly
+                changing requirements, user profiles, product catalogs, content management systems, and other
+                semi-structured data workloads.</p>
+            <p>Example document:</p>
+            <pre><code>{
+  "name": "John Doe",
+  "phone": "123-456-7890",
+  "address": {
+    "street": "123 Main St",
+    "city": "Anytown",
+    "state": "CA"
+  },
+  "orders": [
+    {
+      "order_id": 1,
+      "product": "Laptop",
+      "quantity": 1
+    }
+  ]
+}</code></pre>
+            <p>As illustrated in Figure 3, documents of varying sizes can coexist within the same collection and are
+                packed into pages based on the space they require, providing greater flexibility than the fixed row
+                structure used in relational databases.</p>
+
+            <hr>
+
+            <h2>Similarities Between SQL and NoSQL Databases</h2>
+
+            <p>
+                Although SQL and NoSQL databases differ in how they model data, modern database
+                systems share many of the same underlying storage and performance concepts.
+            </p>
+
+            <h3>Pages on Disk</h3>
+
+            <p>
+                Both SQL and NoSQL databases store data on disk using fixed-size
+                <strong>pages</strong>. A page acts as the basic unit of storage and can contain
+                multiple rows, documents, or records. Organizing data into pages makes disk
+                access more efficient and simplifies memory management.
+            </p>
+
+            <h3>Buffer Pool</h3>
+
+            <p>
+                Accessing data directly from disk is relatively slow. To reduce disk I/O,
+                databases use a <strong>buffer pool</strong>, which is an area of memory (RAM)
+                used to cache frequently accessed pages.
+            </p>
+
+            <p>
+                When a query requests data, the database first checks whether the required page
+                is already present in the buffer pool. If it is, the data can be returned
+                immediately without reading from disk. Otherwise, the page is loaded from disk
+                into memory.
+            </p>
+
+            <p>
+                You can think of the buffer pool as a cache for database pages.
+            </p>
+
+            <p><strong>Benefits:</strong></p>
+
+            <ul>
+                <li>Faster query execution</li>
+                <li>Reduced disk reads</li>
+                <li>Better overall performance</li>
+                <li>Improved scalability under heavy workloads</li>
+            </ul>
+
+            <h3>Write-Ahead Logging (WAL)</h3>
+
+            <p>
+                Modern databases must ensure that committed data is not lost even if the system
+                crashes. To achieve this, many databases use <strong>Write-Ahead Logging (WAL)</strong>.
+            </p>
+
+            <p><strong>The core idea is simple:</strong></p>
+
+            <ul>
+                <li>Write the change to a log file.</li>
+                <li>Confirm that the log has been safely stored.</li>
+                <li>Apply the change to the actual data pages later.</li>
+            </ul>
+
+            <p>
+                For example, if a bank transfer updates an account balance, the update is first
+                recorded in the WAL. Even if the server crashes before the data page is written
+                to disk, the database can replay the log during recovery and restore the
+                committed changes.
+            </p>
+
+            <p><strong>Benefits:</strong></p>
+
+            <ul>
+                <li>Crash recovery</li>
+                <li>Data durability</li>
+                <li>Improved reliability</li>
+                <li>Protection against data loss</li>
+            </ul>
+
+            <h3>Indexing</h3>
+
+            <p>
+                Both SQL and NoSQL databases use indexes to speed up data retrieval. Instead of
+                scanning every row or document, an index allows the database to quickly locate
+                the required records.
+            </p>
+
+            <p>
+                Many databases use <strong>B+ Trees</strong> as their default indexing
+                structure, although some NoSQL databases may also use hash indexes, LSM trees,
+                or other specialized structures depending on their workload.
+            </p>
+
+            <p><strong>Benefits:</strong></p>
+
+            <ul>
+                <li>Faster searches</li>
+                <li>Efficient range queries</li>
+                <li>Reduced query execution time</li>
+                <li>Better performance on large datasets</li>
+            </ul>
+
+            <hr>
+
+            <h2>SQL vs NoSQL: Side-by-Side Comparison</h2>
+
+            <table style="width: 100%; border-collapse: collapse; margin: 1.5rem 0;">
+                <thead>
+                    <tr style="background-color: var(--bg-tertiary);">
+                        <th style="border: 1px solid var(--border-color); padding: 0.75rem; text-align: left;">
+                            Feature
+                        </th>
+                        <th style="border: 1px solid var(--border-color); padding: 0.75rem; text-align: left;">
+                            SQL
+                        </th>
+                        <th style="border: 1px solid var(--border-color); padding: 0.75rem; text-align: left;">
+                            NoSQL
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="border: 1px solid var(--border-color); padding: 0.75rem;">Data Model</td>
+                        <td style="border: 1px solid var(--border-color); padding: 0.75rem;">Tables and rows</td>
+                        <td style="border: 1px solid var(--border-color); padding: 0.75rem;">Documents, key-value,
+                            graph, column-family</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid var(--border-color); padding: 0.75rem;">Schema</td>
+                        <td style="border: 1px solid var(--border-color); padding: 0.75rem;">Fixed</td>
+                        <td style="border: 1px solid var(--border-color); padding: 0.75rem;">Flexible</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid var(--border-color); padding: 0.75rem;">Relationships</td>
+                        <td style="border: 1px solid var(--border-color); padding: 0.75rem;">Strong support</td>
+                        <td style="border: 1px solid var(--border-color); padding: 0.75rem;">Often embedded within
+                            documents</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid var(--border-color); padding: 0.75rem;">Transactions</td>
+                        <td style="border: 1px solid var(--border-color); padding: 0.75rem;">Full ACID support</td>
+                        <td style="border: 1px solid var(--border-color); padding: 0.75rem;">Usually document-focused
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid var(--border-color); padding: 0.75rem;">Scalability</td>
+                        <td style="border: 1px solid var(--border-color); padding: 0.75rem;">Traditionally vertical</td>
+                        <td style="border: 1px solid var(--border-color); padding: 0.75rem;">Often designed for
+                            horizontal scaling</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid var(--border-color); padding: 0.75rem;">Data Consistency</td>
+                        <td style="border: 1px solid var(--border-color); padding: 0.75rem;">Strong consistency</td>
+                        <td style="border: 1px solid var(--border-color); padding: 0.75rem;">May offer flexible
+                            consistency models</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid var(--border-color); padding: 0.75rem;">Best For</td>
+                        <td style="border: 1px solid var(--border-color); padding: 0.75rem;">Structured data</td>
+                        <td style="border: 1px solid var(--border-color); padding: 0.75rem;">Rapidly changing or
+                            semi-structured data</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <hr>
+
+
+            <h3><strong>When Should You Choose SQL?</strong></h3>
+
+            <p>
+                SQL databases are a good choice when your application requires strong data
+                consistency, reliable transactions, and well-defined relationships between
+                data. They work best when the structure of the data is relatively stable and
+                complex queries, reporting, or analytics are important requirements.
+            </p>
+
+            <p>Typical use cases include:</p>
+
+            <ul>
+                <li>Banking and financial systems</li>
+                <li>Accounting software</li>
+                <li>Enterprise Resource Planning (ERP) systems</li>
+                <li>Airline, hotel, and ticket reservation systems</li>
+            </ul>
+
+            <hr>
+
+            <h3><strong>When Should You Choose NoSQL?</strong></h3>
+
+            <p>
+                NoSQL databases are a better fit when your application needs flexibility,
+                scalability, and the ability to handle rapidly changing data structures. They
+                are particularly useful for large-scale distributed systems, high-traffic
+                applications, and workloads that require fast read and write operations.
+            </p>
+
+            <p>Typical use cases include:</p>
+
+            <ul>
+                <li>Social media platforms</li>
+                <li>Content management systems</li>
+                <li>Real-time analytics applications</li>
+                <li>Internet of Things (IoT) systems</li>
+            </ul>
+
+            <hr>
+
+            <h2><strong>Common Misconceptions</strong></h2>
+
+            <ul>
+                <li>
+                    <strong>"NoSQL is always faster than SQL."</strong> – This is one of
+                    the most common misconceptions. Performance depends on factors such as
+                    the data model, query patterns, indexing strategy, and hardware
+                    resources. A well-designed SQL database can easily outperform a poorly
+                    designed NoSQL database, just as a properly modelled NoSQL database can
+                    outperform SQL for certain workloads. The right choice depends on the
+                    problem being solved, not on the database category alone.
+                </li>
+
+                <li>
+                    <strong>"SQL databases cannot scale."</strong> – While SQL databases
+                    were traditionally associated with vertical scaling (adding more
+                    resources to a single server), modern SQL databases support various
+                    scaling techniques such as replication, partitioning (sharding), read
+                    replicas, and distributed architectures. Many large-scale applications
+                    successfully run on SQL databases handling millions of users and
+                    transactions.
+                </li>
+
+                <li>
+                    <strong>"NoSQL databases have no schema or structure."</strong> – NoSQL
+                    databases are not schema-less; they are more accurately described as
+                    schema-flexible. The structure is often enforced at the application
+                    level rather than strictly by the database. Documents, key-value pairs,
+                    or other data models still follow an organised structure, but developers
+                    have more freedom to evolve that structure over time.
+                </li>
+
+                <li>
+                    <strong>"SQL and NoSQL are competing technologies."</strong> – SQL and
+                    NoSQL databases are designed to solve different problems and are often
+                    used together within the same application. For example, a company might
+                    use a SQL database for financial transactions and a NoSQL database for
+                    user activity logs or product recommendations. Choosing one does not
+                    necessarily mean excluding the other.
+                </li>
+
+                <li>
+                    <strong>"NoSQL databases do not support transactions."</strong> – Early
+                    NoSQL databases often prioritised scalability over transactional
+                    guarantees, which led to this misconception. Today, many NoSQL
+                    databases, including MongoDB, support transactions and atomic
+                    operations. However, the scope and implementation may differ from the
+                    ACID transactions commonly found in relational databases.
+                </li>
+
+                <li>
+                    <strong>"Indexes are only important in SQL databases."</strong> – Both
+                    SQL and NoSQL databases rely heavily on indexes for performance. Without
+                    proper indexing, queries can become slow regardless of the database
+                    type. The underlying indexing structures may differ, but the goal
+                    remains the same: efficiently locating data without scanning the entire
+                    dataset.
+                </li>
+            </ul>
+
+            <hr>
+
+            <h2><strong>Conclusion</strong></h2>
+
+            <p>
+                By now, you should have a better understanding of both SQL and NoSQL databases,
+                including how they store data, handle updates, manage concurrency, use indexes,
+                and ensure reliability. More importantly, you should have a clearer idea of the
+                types of problems each database is designed to solve.
+            </p>
+
+            <p>
+                Choosing between SQL and NoSQL is not about deciding which one is better; it is
+                about selecting the right tool for your specific requirements. If your
+                application requires strong consistency, reliable transactions, and
+                well-defined relationships, SQL is often the better choice. If flexibility,
+                scalability, and rapidly evolving data models are more important, NoSQL may be
+                a better fit.
+            </p>
+
+            <p>
+                However, this is only part of the story. In real-world systems, database
+                selection involves many additional considerations, such as scalability
+                requirements, data access patterns, operational complexity, team expertise, and
+                infrastructure constraints. In fact, many modern applications use both SQL and
+                NoSQL databases together, leveraging the strengths of each where they make the
+                most sense.
+            </p>
+
+            <p>
+                Understanding these fundamentals provides a solid foundation, and as you dive
+                deeper into database internals and distributed systems, you'll discover that
+                database design is often about balancing trade-offs rather than finding a
+                one-size-fits-all solution.
+            </p>
+
+            <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+                <a href="../blog.html" class="back-link">← Back to Blog</a>
+            </div>
+        </div>
+    </article>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Adesh Ghadage. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/interactions.js"></script>
+</body>
+
+</html>
