@@ -33,21 +33,21 @@
 
 
 // ── 5. MAGNETIC BUTTONS ──────────────────────────────────────────────────────
-document.querySelectorAll('.btn, .contact-btn').forEach(btn => {
-    btn.addEventListener('mousemove', e => {
-        const rect  = btn.getBoundingClientRect();
-        const x     = e.clientX - rect.left - rect.width  / 2;
-        const y     = e.clientY - rect.top  - rect.height / 2;
-        const pull  = 0.3;
-        btn.style.transform = `translate(${x * pull}px, ${y * pull}px)`;
-    });
+// document.querySelectorAll('.btn, .contact-btn').forEach(btn => {
+//     btn.addEventListener('mousemove', e => {
+//         const rect  = btn.getBoundingClientRect();
+//         const x     = e.clientX - rect.left - rect.width  / 2;
+//         const y     = e.clientY - rect.top  - rect.height / 2;
+//         const pull  = 0.3;
+//         btn.style.transform = `translate(${x * pull}px, ${y * pull}px)`;
+//     });
 
-    btn.addEventListener('mouseleave', () => {
-        btn.style.transform   = '';
-        btn.style.transition  = 'transform 0.5s cubic-bezier(0.23,1,0.32,1)';
-        setTimeout(() => btn.style.transition = '', 500);
-    });
-});
+//     btn.addEventListener('mouseleave', () => {
+//         btn.style.transform   = '';
+//         btn.style.transition  = 'transform 0.5s cubic-bezier(0.23,1,0.32,1)';
+//         setTimeout(() => btn.style.transition = '', 500);
+//     });
+// });
 
 
 // ── 6. PARTICLE CANVAS (Hero background) ─────────────────────────────────────
