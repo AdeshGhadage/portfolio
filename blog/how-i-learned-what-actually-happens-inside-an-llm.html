@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How I Learned What Actually Happens Inside an LLM - Blog</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <!-- <a href="../index.html" class="logo">AG</a> -->
+            <ul class="nav-links">
+                <li><a href="../index.html#home" class="nav-link">Home</a></li>
+                <li><a href="../index.html#about" class="nav-link">About</a></li>
+                <li><a href="../index.html#projects" class="nav-link">Projects</a></li>
+                <li><a href="../blog.html" class="nav-link active">Blog</a></li>
+                <li><a href="../index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <button class="menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Post Header -->
+    <header class="post-header">
+        <div class="container">
+            <a href="../blog.html" class="back-link">← Back to Blog</a>
+            <h1 class="page-title">How I Learned What Actually Happens Inside an LLM</h1>
+            <div class="post-meta">
+                <span>📅 June 12, 2026</span>
+                <span>⏱️ 20–30 min read</span>
+                <span>🏷️ LLM, Prompt Engineering, Tokenization</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Post Content -->
+    <article class="post-content">
+        <div class="container">
+            <p>
+                Recently I spent some time trying to understand what actually happens inside a large language model
+                (LLM). At first, it looked like magic, but after digging deeper, I realised that the core idea is
+                surprisingly simple.
+            </p>
+            <p>
+                An LLM (Large Language Model) is essentially a very large neural network trained on huge amounts of text
+                data. During training, it reads billions or even trillions of words collected from books, articles,
+                websites, code repositories, research papers, and many other sources.
+            </p>
+            <p>
+                The goal of the model is simple:
+            </p>
+            <p><strong>Predict the next token given all previous tokens.</strong></p>
+            <p>
+                Everything else emerges from this objective.
+            </p>
+
+            <hr>
+            <h2>The Basic Idea</h2>
+            <p>
+                Imagine I give the model the sentence:
+            </p>
+            <p><em>The capital of France is</em></p>
+            <p>
+                The model does not search the internet for the answer. Instead, based on patterns learned during
+                training, it calculates probabilities for possible next tokens.
+            </p>
+            <p>Something like:</p>
+            <img src="../images/LLM%20blog/pairs%20example.png" alt="Probability distribution for next token">
+            <p>
+                The model then selects a token based on these probabilities.
+            </p>
+            <p>
+                After generating "Paris", it repeats the same process for the next token.
+            </p>
+            <p>Input:</p>
+            <img src="../images/LLM%20blog/captial%20of%20france.png"
+                alt="The capital of France is Paris generation example">
+            <p>
+                Generation is simply this prediction process repeated over and over.
+            </p>
+
+            <hr>
+            <h2>Why Neural Networks Need Training</h2>
+            <p>
+                An LLM is made up of billions of parameters (often called weights). These weights determine how
+                information flows through the network. Initially, the weights are random, and the model produces
+                nonsense.
+            </p>
+            <p>During training:</p>
+            <ol>
+                <li>The model predicts the next token.</li>
+                <li>The prediction is compared with the actual token.</li>
+                <li>The error is calculated.</li>
+                <li>The weights are adjusted slightly.</li>
+                <li>The process repeats billions of times.</li>
+            </ol>
+            <p>Over time, the network gradually learns:</p>
+            <ul>
+                <li>grammar</li>
+                <li>sentence structure</li>
+                <li>facts</li>
+                <li>reasoning patterns</li>
+                <li>coding syntax</li>
+                <li>language relationships</li>
+            </ul>
+            <p>
+                This learning process is done using optimisation algorithms such as gradient descent and
+                backpropagation.
+            </p>
+
+            <hr>
+            <h2>The First Problem: Computers Do Not Understand Words</h2>
+            <p>
+                Computers do not understand English the way humans do. To a computer, words such as <em>'cat', 'dog',
+                    'apple',</em> or <em>'happy'</em> are simply sequences of characters with no inherent meaning. It
+                does not naturally know that <em>'cat' and 'dog'</em> are related animals, that <em>'happy' and
+                    'joyful'</em> have similar meanings, or that <em>'good' and 'bad'</em> are opposites. To make
+                language understandable to a neural network, we need a way to represent the meaning and relationships
+                between words mathematically.
+            </p>
+
+            <hr>
+            <h2>Word Embeddings</h2>
+            <img src="../images/LLM%20blog/Word%20Embedding%20chart.png" alt="Word embedding chart">
+            <p>
+                To make language understandable to a neural network, words are converted into <strong>vectors</strong>,
+                which are simply lists of numbers. As shown above, words such as "good," "bad," "happy," and "sad" are
+                represented by numerical vectors instead of plain text. These vectors place words in a high-dimensional
+                mathematical space where words with similar meanings end up closer together and words with opposite
+                meanings end up farther apart. The model learns these relationships automatically during training,
+                allowing it to capture semantic meaning mathematically. This idea, known as <strong>word
+                    embeddings</strong>, was a major breakthrough because it gave computers a way to represent and
+                reason about relationships between words rather than treating them as unrelated symbols.
+            </p>
+            <img src="../images/LLM%20blog/Embedding%20Layer.png" alt="Embedding vectors diagram">
+
+            <hr>
+            <h2>The Vocabulary Problem</h2>
+            <p>
+                Once words could be represented mathematically, another challenge appeared: vocabulary size. English
+                contains hundreds of thousands of words, and many words have multiple forms, such as "run", "running",
+                "runner", and "runnable". If every word received its own token, the vocabulary would become extremely
+                large, making training and storage much more expensive.
+            </p>
+
+            <h2>Character-Based Tokenization</h2>
+            <p>
+                One possible solution was to split text into individual characters. This greatly reduces vocabulary size
+                because only letters, numbers, and symbols need to be stored. However, words become much longer
+                sequences of characters, which increases computation and makes learning language relationships more
+                difficult. Researchers needed a solution between full-word tokens and character-level tokens.
+            </p>
+
+            <h2>Subword Tokenization</h2>
+            <p>
+                The solution was <strong>subword Tokenization.</strong> Instead of treating words as complete units or
+                breaking them into individual characters, words are split into reusable pieces. For example,
+                <em>playing</em> can become <em>play + ing</em>, while <em>unbelievable</em> can become <em>un + believe
+                    + able</em>. This approach keeps the vocabulary manageable while still preserving meaning. Most
+                modern LLMs use some form of subword Tokenization.
+            </p>
+
+            <h2>Byte Pair Encoding (BPE)</h2>
+            <p>
+                One of the most popular Tokenization methods is <strong>Byte Pair Encoding (BPE)</strong>. The process
+                starts with individual characters and repeatedly merges character pairs that appear frequently together.
+                Over time, common patterns become complete tokens. This allows the vocabulary to be built automatically
+                from real language usage rather than being manually designed.
+            </p>
+            <img src="../images/LLM%20blog/BPE.png" alt="Byte Pair Encoding example">
+
+            <h2>From Tokens to Token IDs</h2>
+            <p>
+                After Tokenization, each token is assigned a unique numerical identifier called a <strong>token
+                    ID</strong>. For example, a sentence such as <em>"I love pizza"</em> may be converted into a
+                sequence of token IDs. These IDs allow text to be processed by computers efficiently, but by themselves
+                they contain no meaning. The number assigned to a token is simply a label.
+            </p>
+            <img src="../images/LLM%20blog/token.png" alt="Tokenization example">
+
+            <h2>The Embedding Layer</h2>
+            <p>
+                Since token IDs do not carry meaning, they are passed through an <strong>embedding layer</strong>, which
+                converts each token ID into a dense vector of numbers. This is where language is transformed into
+                mathematics. Similar words tend to have similar embeddings, allowing the model to learn relationships
+                between concepts. The transformer never works directly with words; it operates entirely on these
+                embedding vectors.
+            </p>
+            <img src="../images/LLM%20blog/Embedding%20Layer.png" alt="Token IDs to embedding vectors diagram">
+
+            <h2>The Transformer</h2>
+            <p>
+                The next stage is the <strong>Transformer</strong>, introduced in the 2017 paper <em>Attention Is All
+                    You Need</em>. The key innovation of the transformer is the <strong>attention mechanism</strong>,
+                which allows tokens to focus on other relevant tokens in the sentence when determining meaning. For
+                example, in the sentence:
+            </p>
+            <p><em>The animal didn't cross the street because it was tired.</em></p>
+            <p>
+                the model can learn that <strong>"it"</strong> refers to <strong>"animal"</strong> rather than
+                <strong>"street"</strong> by paying attention to the surrounding context. This ability to capture
+                relationships between words at different positions is one of the main reasons transformers became the
+                foundation of modern LLMs.
+            </p>
+
+            <hr>
+            <h2>Complete Text-to-Output Flow</h2>
+            <img src="../images/LLM%20blog/Text-to-Output.png" alt="Complete text-to-output flow">
+
+            <hr>
+            <h2>Why LLMs Seem Intelligent</h2>
+            <p>
+                Interestingly, the model was never explicitly taught:
+            </p>
+            <ul>
+                <li>grammar</li>
+                <li>coding</li>
+                <li>reasoning</li>
+                <li>translation</li>
+                <li>summarization</li>
+            </ul>
+            <p>
+                It only learned to predict the next token.
+            </p>
+            <p>
+                Yet because it saw enormous amounts of text, many capabilities emerged naturally.
+            </p>
+            <p>
+                This phenomenon is called <strong>'emergent behaviour'</strong>.
+            </p>
+
+            <hr>
+            <h2>Limitations</h2>
+            <p>
+                Even though LLMs are powerful, they have important limitations.
+            </p>
+
+            <h3>Hallucinations</h3>
+            <p>
+                The model may generate information that sounds correct but is actually false.
+            </p>
+            <p>Example:</p>
+            <ul>
+                <li>fake references</li>
+                <li>fake URLs</li>
+                <li>invented facts</li>
+            </ul>
+            <p>
+                The model optimises for likely text, not truth.
+            </p>
+
+            <h3>Bias</h3>
+            <p>
+                The model learns from human-generated data.
+            </p>
+            <p>
+                If the training data contains biases, the model may reproduce them.
+            </p>
+            <p>Examples include:</p>
+            <ul>
+                <li>language bias</li>
+                <li>cultural bias</li>
+                <li>selection bias</li>
+                <li>political bias</li>
+            </ul>
+
+            <hr>
+            <h2>Common LLM Settings</h2>
+            <p>
+                Modern LLMs expose several settings that control how text is generated.
+            </p>
+
+            <h3>Temperature</h3>
+            <p>
+                Temperature controls randomness.
+            </p>
+            <p>
+                A low temperature makes the model choose the most likely next token more often, producing focused and
+                predictable answers.
+            </p>
+            <p>
+                A high temperature increases randomness, making outputs more creative but sometimes less reliable.
+            </p>
+            <p>
+                <strong>Example:</strong> Use a low temperature for factual Q&amp;A and a higher temperature for
+                brainstorming or creative writing.
+            </p>
+
+            <h3>Top-P (Nucleus Sampling)</h3>
+            <p>
+                Top-P controls the pool of candidate tokens the model can choose from.
+            </p>
+            <p>
+                Instead of considering every possible token, the model keeps selecting tokens until their combined
+                probability reaches the top-P value, then chooses from that smaller set.
+            </p>
+            <p>
+                <strong>Example:</strong> A lower Top-P produces more focused responses, while a higher Top-P allows
+                more variety.
+            </p>
+
+            <h3>Max Length</h3>
+            <p>
+                Max length limits how many tokens the model can generate before stopping.
+            </p>
+            <p>
+                <strong>Example:</strong> Useful when generating summaries, short answers, or responses with strict
+                length limits.
+            </p>
+
+            <h3>Stop Sequences</h3>
+            <p>
+                A stop sequence is a token or string that tells the model when to stop generating text.
+            </p>
+            <p>
+                <strong>Example:</strong> If the stop sequence is "11.", asking for a numbered list will cause
+                generation to stop before item 11, producing only 10 items.
+            </p>
+
+            <h3>Frequency Penalty</h3>
+            <p>
+                Frequency penalty reduces the chance of repeatedly generating words that have already appeared many
+                times.
+            </p>
+            <p>
+                The more often a token appears, the stronger the penalty becomes.
+            </p>
+            <p>
+                <strong>Example:</strong> Useful when the model keeps repeating the same phrases or keywords.
+            </p>
+
+            <h3>Presence Penalty</h3>
+            <p>
+                A presence penalty discourages reuse of tokens that have already appeared at least once.
+            </p>
+            <p>
+                Unlike a frequency penalty, the penalty does not increase with repeated occurrences.
+            </p>
+            <p>
+                <strong>Example:</strong> Useful for encouraging the model to introduce new topics or ideas instead of
+                revisiting the same ones.
+            </p>
+
+            <hr>
+            <h2>Prompt Engineering and Common Prompting Techniques</h2>
+            <p>
+                Now that we have gone through the core concepts of LLMs, let's talk about prompting. At its core,
+                prompting is about influencing probabilities.
+            </p>
+            <p>
+                An LLM generates text by predicting the most likely next token. Every word, instruction, example, or
+                piece of context you add to a prompt changes those probabilities. This is why even small changes in
+                wording can sometimes produce very different outputs.
+            </p>
+            <p>
+                In general, the more relevant information you provide, the higher the probability that the model will
+                generate the output you are looking for.
+            </p>
+
+            <h3>General Prompting Tips</h3>
+            <p>
+                A few simple practices usually improve results:
+            </p>
+            <ul>
+                <li>Start with a clear and simple instruction.</li>
+                <li>Use action words such as <strong>'write', 'summarise', 'classify', 'translate', 'explain',</strong>
+                    or <strong>'extract'.</strong></li>
+                <li>Separate instructions, context, input data, and expected output format.</li>
+                <li>Be specific about what you want.</li>
+                <li>Avoid adding unnecessary details that may confuse the model.</li>
+            </ul>
+            <p>
+                A common prompt structure looks like:
+            </p>
+            <pre><code>Instruction
+
+------------
+
+Context
+
+------------
+
+Input Data
+
+------------
+
+Expected Output Format</code></pre>
+            <p>
+                In many cases, this simple structure is enough to get good results.
+            </p>
+
+            <hr>
+            <h2>Common Prompting Techniques</h2>
+
+            <h3>Zero-Shot Prompting</h3>
+            <p>
+                Zero-shot prompting means giving the model only instructions without examples.
+            </p>
+            <p><strong>Example uses:</strong></p>
+            <ul>
+                <li>Summarization</li>
+                <li>Translation</li>
+                <li>Text classification</li>
+                <li>Explaining concepts</li>
+                <li>Generating ideas</li>
+            </ul>
+            <p>
+                This works best when the task is straightforward and the model already understands what is being asked.
+            </p>
+
+            <h3>Few-Shot Prompting</h3>
+            <p>
+                Few-shot prompting provides a few examples before asking the model to solve a new problem.
+            </p>
+            <p>
+                The examples show the pattern that should be followed.
+            </p>
+            <p><strong>Example uses:</strong></p>
+            <ul>
+                <li>Specific output formats</li>
+                <li>Domain-specific tasks</li>
+                <li>Unusual question styles</li>
+                <li>Consistent response formatting</li>
+            </ul>
+            <p>
+                The model learns the pattern from the examples and continues it.
+            </p>
+
+            <h3>Chain of Thought (CoT)</h3>
+            <p>
+                Chain of Thought encourages the model to reason through multiple steps before reaching an answer.
+            </p>
+            <p>
+                Instead of jumping directly to a conclusion, the model breaks the problem into smaller reasoning steps.
+            </p>
+            <p><strong>Example uses:</strong></p>
+            <ul>
+                <li>Mathematics</li>
+                <li>Logic problems</li>
+                <li>Planning</li>
+                <li>Multi-step analysis</li>
+            </ul>
+            <p>
+                This technique is useful when solving the problem requires intermediate reasoning.
+            </p>
+
+            <h3>Self-Consistency</h3>
+            <p>
+                Self-consistency extends the chain of thought.
+            </p>
+            <p>
+                Instead of generating a single reasoning path, the model generates multiple independent reasoning paths
+                internally and selects the answer that appears most consistently across them.
+            </p>
+            <p><strong>Example uses:</strong></p>
+            <ul>
+                <li>Mathematical reasoning</li>
+                <li>Competitive problem-solving</li>
+                <li>Logic puzzles</li>
+                <li>Scientific reasoning</li>
+            </ul>
+            <p>
+                This often improves accuracy on difficult reasoning tasks.
+            </p>
+
+            <h3>Tree of Thoughts (ToT)</h3>
+            <p>
+                Tree of Thoughts expands the idea further.
+            </p>
+            <p>
+                Instead of following one reasoning path, the model explores multiple possible paths, evaluates them,
+                discards weak paths, and continues exploring promising ones.
+            </p>
+            <p>
+                You can think of it as a search algorithm operating over reasoning steps.
+            </p>
+            <p><strong>Example uses:</strong></p>
+            <ul>
+                <li>Complex planning</li>
+                <li>Strategy problems</li>
+                <li>Product design</li>
+                <li>Business decision-making</li>
+                <li>Puzzle solving</li>
+            </ul>
+
+            <h3><strong>Prompt Chaining</strong></h3>
+
+            <p>
+                Prompt chaining breaks a large task into multiple smaller prompts.
+            </p>
+
+            <p>
+                The output of one prompt becomes the input of the next prompt.
+            </p>
+
+            <p><strong>Example:</strong></p>
+
+            <p>
+                Research → Summarize → Generate Report → Review Report
+            </p>
+
+            <p>
+                This often produces better results than asking the model to do everything in a
+                single prompt.
+            </p>
+
+            <hr>
+
+            <h3><strong>RAG (Retrieval-Augmented Generation)</strong></h3>
+
+            <p>
+                RAG provides external knowledge to the model before it generates an answer.
+            </p>
+
+            <p>
+                Instead of relying only on what was learned during training, the model retrieves
+                relevant information from documents, databases, or knowledge bases.
+            </p>
+
+            <p><strong>Example uses:</strong></p>
+
+            <ul>
+                <li>Company documentation</li>
+                <li>Internal knowledge bases</li>
+                <li>PDFs</li>
+                <li>Product manuals</li>
+                <li>Frequently changing information</li>
+            </ul>
+
+            <p>
+                This significantly reduces hallucinations when accurate source information is
+                available.
+            </p>
+
+            <hr>
+
+            <h3><strong>Reflection and Critique Prompting</strong></h3>
+
+            <p>
+                In this technique, the model reviews its own answer before producing a final
+                response.
+            </p>
+
+            <p>
+                The model acts as its own reviewer and attempts to identify mistakes, missing
+                information, or weak reasoning.
+            </p>
+
+            <p><strong>Example uses:</strong></p>
+
+            <ul>
+                <li>Code review</li>
+                <li>Report generation</li>
+                <li>Research summaries</li>
+                <li>Quality checking</li>
+            </ul>
+
+            <hr>
+
+            <h3><strong>Role Prompting</strong></h3>
+
+            <p>
+                Role prompting assigns a role or perspective to the model.
+            </p>
+
+            <p><strong>Examples:</strong></p>
+
+            <ul>
+                <li>"Act as a software architect."</li>
+            </ul>
+
+            <p>
+                This helps guide the style, vocabulary, and perspective of the response.
+            </p>
+
+            <hr>
+
+            <h2><strong>Final Thoughts</strong></h2>
+
+            <p>
+                Prompt engineering is an iterative process rather than a fixed set of rules.
+                Different models, model versions, and providers may respond differently to the
+                same prompt.
+            </p>
+
+            <p>
+                A technique that works well today may become less important as models improve.
+                Modern LLMs are becoming increasingly good at understanding user intent, which
+                means many tasks now require much less prompt engineering than they did a few
+                years ago.
+            </p>
+
+            <p>
+                However, the core idea remains the same:
+            </p>
+
+            <p>
+                <strong>
+                    Every word added to a prompt changes the probability distribution of the next
+                    generated token. Prompt engineering is ultimately the art of shaping those
+                    probabilities to guide the model toward the desired output.
+                </strong>
+            </p>
+
+            <h2><strong>My Thoughts on LLMs and Understanding</strong></h2>
+
+            <p>
+                One debate that comes up often is whether LLMs actually understand things or
+                whether they are simply doing very advanced pattern matching.
+            </p>
+
+            <p>
+                Personally, I lean more toward the pattern-matching side.
+            </p>
+
+            <p>
+                The interesting thing is that the results often look like understanding. The
+                model can answer questions, explain concepts, write code, summarise documents,
+                and even reason through problems. From the outside, it feels like understanding
+                because the outputs are often correct and useful.
+            </p>
+
+            <p>
+                But when I look at how these systems are trained, it still feels like a very
+                sophisticated form of pattern matching. They have seen enormous amounts of data
+                and learned relationships between tokens, concepts, and ideas. When we ask a
+                question, they generate an answer based on those learned patterns.
+            </p>
+
+            <p>
+                At the same time, I don't have complete confidence in that opinion.
+            </p>
+
+            <p>
+                Human intelligence evolved over billions of years. The human brain is the
+                result of an incredibly long process of evolution. If humans are able to create
+                something with human-like reasoning or learning capabilities in just a few
+                decades, that would be a remarkable achievement. Sometimes it feels difficult
+                to believe that we have already recreated something comparable to human
+                understanding.
+            </p>
+
+            <p>
+                I also wonder whether humans themselves are doing something that is not
+                completely different. We are constantly predicting. We predict what people
+                mean, what might happen next, what words to say, and what actions to take. In
+                some sense, human thinking also looks like a prediction process that never
+                completely stops.
+            </p>
+
+            <p>
+                If one day we create AI that truly thinks like a human, I suspect it may
+                inherit some of the same limitations that humans have.
+            </p>
+
+            <p>
+                Humans need rest. Humans consume energy. Humans cannot think forever without
+                fatigue. Humans forget things. Humans need resources to survive.
+            </p>
+
+            <p>
+                If future AI systems develop intelligence that is much closer to human
+                intelligence, I wonder whether similar constraints will appear in some form.
+                Maybe they will need downtime, energy, memory management, or other limitations
+                that resemble human needs.
+            </p>
+
+            <p>
+                And if we eventually reproduce every important aspect of human intelligence,
+                then an interesting question appears:
+            </p>
+
+            <p>
+                <strong>
+                    What was the point of building it if we ended up recreating many of the same
+                    limitations?
+                </strong>
+            </p>
+
+            <p>
+                I don't know the answer.
+            </p>
+
+            <p>
+                What I do know is that LLMs are one of the most interesting technologies I have
+                ever learned about. Their capabilities are already impressive, and the pace of
+                improvement is surprisingly fast.
+            </p>
+
+            <p>
+                The future of AI feels both exciting and uncertain. It is difficult to predict
+                where these systems will be in five, ten, or twenty years. For now, I think the
+                most honest answer is that we are still figuring out what intelligence really
+                is, and that makes the future hard to predict.
+            </p>
+        </div>
+    </article>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Adesh Ghadage. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/interactions.js"></script>
+</body>
+
+</html>
