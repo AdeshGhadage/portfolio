@@ -102,9 +102,18 @@ button {
    ====================== */
 .hero {
     text-align: center;
-    padding: 16rem 0;
+    padding: 12rem 0;
     background-color: var(--bg-primary);
     border-bottom: 1px solid var(--border-color);
+}
+
+.hero-image {
+    width: 260px;
+    height: 200px;
+    border-radius: 50%;
+    margin-bottom: 1.5rem;
+    object-fit: cover;
+    border: 3px solid var(--accent-secondary);
 }
 
 .hero .container {
