@@ -114,18 +114,7 @@
             <!-- Technical Implementation -->
             <div class="project-section">
                 <h2>Technical Implementation</h2>
-                <h3 style="font-size: 1.3rem; margin-top: 1.5rem; margin-bottom: 1rem;">UI and Workflow</h3>
-                <p>
-                    The UI is implemented in Streamlit so the workflow stays simple and interactive.
-                    The user can upload a file, enter an API key, ask a question, and inspect each stage
-                    of the pipeline without leaving the page.
-                </p>
-                <pre
-                    style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; overflow-x: auto; margin: 1rem 0;"><code># High-level workflow
-file -> schema extraction -> prompt assembly -> SQL generation
-         -> value matching -> SQL refinement -> safe execution
-         -> result table -> LLM summary -> chart code generation</code></pre>
-
+                
                 <h3 style="font-size: 1.3rem; margin-top: 2rem; margin-bottom: 1rem;">Engine Modules</h3>
                 <p>
                     The core logic is split into focused modules under the engine folder. Each module
@@ -212,17 +201,6 @@ file -> schema extraction -> prompt assembly -> SQL generation
                 </ul>
             </div>
 
-            <!-- Future Improvements -->
-            <div class="project-section">
-                <h2>Future Improvements</h2>
-                <ul style="color: var(--text-secondary); margin: 1rem 0 1.5rem 2rem;">
-                    <li>Add support for more file formats and larger datasets</li>
-                    <li>Improve chart selection with automatic visualization recommendations</li>
-                    <li>Add stronger SQL validation and error recovery</li>
-                    <li>Support multiple LLM providers and prompt strategies</li>
-                    <li>Add caching and test coverage for the workflow modules</li>
-                </ul>
-            </div>
 
             <!-- Project Links -->
             <div
