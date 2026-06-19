@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started with Web Development - Blog</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <!-- <a href="../index.html" class="logo">AG</a> -->
+            <ul class="nav-links">
+                <li><a href="../index.html#home" class="nav-link">Home</a></li>
+                <li><a href="../index.html#about" class="nav-link">About</a></li>
+                <li><a href="../index.html#projects" class="nav-link">Projects</a></li>
+                <li><a href="../blog.html" class="nav-link active">Blog</a></li>
+                <li><a href="../index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <button class="menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Post Header -->
+    <header class="post-header">
+        <div class="container">
+            <a href="../blog.html" class="back-link">← Back to Blog</a>
+            <h1 class="page-title">From LLMs to Agentic AI: How Reasoning Learned to Act</h1>
+            <div class="post-meta">
+                <span>📅 19 June 2026</span>
+                <span>⏱️ 10 min read</span>
+                <span>🏷️ Agentic AI, ReAct Framework, AI Systems</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Post Content -->
+    <article class="post-content">
+        <div class="container">
+
+            <p>
+                In the previous article (
+                <a
+                    href="https://adeshghadage.github.io/portfolio/blog/how-i-learned-what-actually-happens-inside-an-llm.html">
+                    article link
+                </a>
+                ), we explored how Large Language Models (LLMs) work internally, from tokenisation and embeddings to
+                transformers and next-token prediction. If you haven't read that article yet, I would recommend going
+                through it first, as many of the concepts discussed here build on that foundation.
+            </p>
+
+            <p>
+                One of the most important ideas we learned is that an LLM generates text by predicting the next most
+                likely token based on everything it has seen so far. Through training on enormous amounts of data, the
+                model learns patterns in language, facts, reasoning structures, coding syntax, and much more.
+            </p>
+
+            <p>
+                This approach is surprisingly powerful. It allows LLMs to answer questions, explain concepts, write
+                code, summarize documents, and even perform multi-step reasoning through techniques such as Chain of
+                Thought.
+            </p>
+
+            <p>
+                However, despite all these capabilities, LLMs have an important limitation.
+            </p>
+
+            <p>
+                They only generate text.
+            </p>
+
+            <p>
+                At first, this might not sound like a major problem. But consider a few simple questions:
+            </p>
+
+            <ul>
+                <li>What is the weather in Pune right now?</li>
+                <li>What is the current stock price of Apple?</li>
+                <li>Send an email to my manager.</li>
+                <li>Calculate the square root of a very large number.</li>
+                <li>Search through a company's internal documentation and find a specific policy.</li>
+            </ul>
+
+            <p>
+                A traditional LLM struggles with these tasks for different reasons.
+            </p>
+
+            <p>
+                For example, weather information changes every minute, but an LLM is trained on historical data. It
+                cannot magically know what happened after its training cutoff.
+            </p>
+
+            <p>
+                Similarly, when performing calculations, the model is not actually using a calculator. It is generating
+                what it believes is the most likely sequence of tokens. While this often produces correct answers for
+                simple arithmetic, it can become unreliable for more complex calculations.
+            </p>
+
+            <p>
+                Even reasoning can fail. If the model makes an incorrect assumption early in a Chain of Thought process,
+                every reasoning step that follows may also become incorrect. A small mistake at the beginning can
+                propagate through the entire chain.
+            </p>
+
+            <p>
+                The fundamental issue is that the model has no way to verify its answers against the real world. What if
+                we could allow an LLM to interact with the outside world instead of relying entirely on its internal
+                knowledge? What if it could search the web, use a calculator, query a database, read files, call APIs,
+                and then use the results to continue its reasoning?
+            </p>
+
+            <p>
+                This simple idea led to one of the most important developments in modern AI systems: Agentic AI.
+            </p>
+
+            <h2>Before ReAct: Two Separate Worlds</h2>
+
+            <p>
+                Before the ReAct paper, researchers mainly explored two different approaches for improving LLMs.
+            </p>
+
+            <figure class="blog-image">
+                <img src="../images/LLM blog/ReAct.png" alt="Reasoning-only vs Action-only approaches before ReAct"
+                    loading="lazy">
+
+                <figcaption>
+                    Image source: Yao et al., <em>ReAct: Synergizing Reasoning and Acting in Language Models</em> (ICLR
+                    2023).
+                </figcaption>
+            </figure>
+
+            <h3>1. Chain of Thought (Reasoning Only)</h3>
+
+            <p>
+                The first approach was Chain of Thought (CoT). The model was encouraged
+                to reason step by step before producing an answer.
+            </p>
+
+            <pre><code>Thought:
+Reasoning...
+Reasoning...
+Reasoning...
+
+Answer</code></pre>
+
+            <h3>2. Tool Usage (Action Only)</h3>
+
+            <p>
+                Another line of research focused on giving models access to external
+                tools such as search engines, databases, or APIs.
+            </p>
+
+            <pre><code>Search(...)
+Search(...)
+Search(...)
+
+Answer</code></pre>
+
+            <hr>
+
+            <h2>The Core Idea Behind ReAct</h2>
+
+            <p>
+                The authors of the ReAct paper asked a simple question:
+                <strong>Why not combine reasoning and acting?</strong>
+            </p>
+
+            <figure class="blog-image">
+                <img src="../images/LLM blog/React flow.png" alt="ReAct Workflow" loading="lazy">
+                <figcaption>Reason → Act → Observe → Reason → Act → Observe</figcaption>
+            </figure>
+
+            <p>
+                This became the ReAct framework:
+            </p>
+
+            <p>
+                <strong>Reason → Act → Observe → Reason → Act → Observe</strong>
+            </p>
+
+            <p>
+                By allowing the model to alternate between thinking and interacting with the outside world, it could use
+                external information to guide its reasoning and use reasoning to guide its actions.
+            </p>
+
+            <p>
+                This simple idea became one of the foundations of modern AI agents.
+            </p>
+
+            <p>
+                Interestingly, this pattern is not completely foreign to us. Humans often solve problems in a very
+                similar way.
+            </p>
+
+            <p>
+                Imagine you are trying to buy a new laptop.
+            </p>
+
+            <p>
+                You typically don't sit in a room and reason entirely from memory until you reach a decision. Instead,
+                your thinking process looks something like this:
+            </p>
+
+            <pre><code>Thought:
+
+I need a laptop for software development.
+
+Action:
+
+Search for laptops.
+
+Observation:
+
+I find several options.
+
+Thought:
+
+The MacBook looks interesting, but it is expensive.
+
+Action:
+
+Read reviews and benchmarks.
+
+Observation:
+
+The battery life and performance are excellent.
+
+Thought:
+
+Let me compare it with other options.
+
+Action:
+
+Search for alternatives.
+
+Observation:
+
+I find a few Windows laptops with similar specifications.
+
+Thought:
+
+After comparing the trade-offs, I prefer the MacBook.
+
+Answer:
+
+Buy the MacBook.</code></pre>
+
+            <p>
+                Notice what happened.
+            </p>
+
+            <p>
+                The decision was not produced through reasoning alone, nor was it produced by blindly collecting
+                information. Instead, reasoning guided what information to gather, and new information continuously
+                updated the reasoning process.
+            </p>
+
+            <p>
+                Humans naturally operate in a loop of <strong>thinking, acting, observing, and thinking again.</strong>
+            </p>
+
+            <p>
+                In many ways, ReAct brings a similar pattern to language models. Instead of forcing the model to rely
+                entirely on its memory or blindly use tools without a plan, it allows the model to continuously combine
+                reasoning with interaction.
+            </p>
+
+            <p>
+                This is what makes ReAct feel intuitive. It is not just giving an LLM access to tools; it is giving the
+                model a structured way to use those tools while continuously updating its understanding of the problem.
+            </p>
+
+            <h3>Teaching LLMs to Reason and Act</h3>
+
+            <p>
+                At this point, an interesting question appears:
+            </p>
+
+            <p>
+                How did researchers actually teach a language model to follow the ReAct pattern?
+            </p>
+
+            <p>
+                Did they train a completely new model?
+            </p>
+
+            <p>
+                Did they modify the transformer architecture?
+            </p>
+
+            <p>
+                Surprisingly, the answer was no.
+            </p>
+
+            <p>
+                As we discussed in the previous article, prompting can significantly influence the behavior of an LLM.
+                We can guide the model toward a specific style of reasoning simply by providing examples in the prompt.
+            </p>
+
+            <p>
+                The ReAct paper used this same idea.
+            </p>
+
+            <p>
+                Instead of training a new model from scratch, the researchers showed the model a few examples that
+                followed a specific format:
+            </p>
+
+            <pre><code>Question: ...
+
+Thought: ...
+
+Action: Search(...)
+
+Observation: ...
+
+Thought: ...
+
+Action: Search(...)
+
+Observation: ...
+
+Answer: ...</code></pre>
+
+            <p>
+                This is an example of <strong>Few-Shot Prompting</strong>.
+            </p>
+
+            <p>
+                By providing several demonstrations of how a problem should be solved, the model learns the pattern and
+                continues it for new questions.
+            </p>
+
+            <p>
+                In other words, the model was not explicitly programmed to reason and act. It was shown examples of
+                reasoning and acting together, and it learned to imitate that behavior.
+            </p>
+
+            <p>
+                To understand this better, let's look at a project I built: <strong>NL2SQL</strong>.
+            </p>
+
+            <p>
+                <strong>Project Link:</strong>
+                <a href="https://adeshghadage.github.io/portfolio/projects/NL2SQL.html">
+                    https://adeshghadage.github.io/portfolio/projects/NL2SQL.html
+                </a>
+            </p>
+
+            <p>
+                The goal of the project is simple. A user uploads a CSV or Excel file and asks questions in natural
+                language, such as "Show me the top 10 customers by revenue" or "Which product category generated the
+                highest sales last month?" The system then analyzes the data and returns results, summaries, and
+                visualizations.
+            </p>
+
+            <p>
+                At first glance, it might seem like the LLM is doing everything. However, the architecture diagram below
+                tells a different story.
+            </p>
+
+            <img src="../images/NL2SQL-Archi.png" alt="NL2SQL Architecture Diagram">
+
+            <p>
+                The first thing that happens is that the application reads the uploaded file and extracts information
+                about its structure. The schema engine identifies tables, column names, data types, and sample values.
+                This information is important because the LLM has never seen the user's data before. Without
+                understanding the schema, it would have no idea what tables or columns exist.
+            </p>
+
+            <p>
+                Once the schema is extracted, the application sends the user's question together with the schema
+                information to the LLM. The model's job is not to answer the question directly. Instead, it reasons
+                about the problem and generates a SQL query that should retrieve the required information.
+            </p>
+
+            <p>
+                At this point, the LLM's work is essentially finished.
+            </p>
+
+            <p>
+                The model does not execute the SQL query. It does not connect to the database. It does not validate
+                whether the query is correct. It does not generate charts. It does not inspect the returned results. All
+                of those responsibilities belong to the surrounding application.
+            </p>
+
+            <p>
+                The application takes the generated SQL and executes it against the database. If the query fails,
+                references the wrong column, or produces poor results, the system can refine the query and try again.
+                Once valid results are obtained, other components generate visualizations, summaries, and insights
+                before returning the final response to the user.
+            </p>
+
+            <p>
+                This architecture taught me an important lesson about modern Agentic AI systems.
+            </p>
+
+            <p>
+                The intelligence is not coming from the language model alone. The intelligence emerges from the
+                collaboration between the LLM and the software around it.
+            </p>
+
+            <p>
+                The application keeps track of the workflow, maintains state, stores data, validates outputs, manages
+                retries, and executes actions. The LLM is primarily responsible for reasoning. It receives context,
+                analyses the problem, and decides what should happen next.
+            </p>
+
+            <p>
+                In many ways, this follows the same idea introduced by ReAct. The model reasons about the task, the
+                application performs actions in the real world, observations are collected, and those observations can
+                be fed back into the system for further reasoning. Rather than relying entirely on the model's memory,
+                the system continuously interacts with external data and tools.
+            </p>
+
+            <p>
+                This separation between reasoning and execution is one of the key ideas behind modern Agentic AI. The
+                LLM acts as the brain, while the surrounding application acts as the hands, eyes, memory, and
+                infrastructure that allow the system to interact with the real world.
+            </p>
+
+            <h2>Final Thoughts</h2>
+
+            <p>
+                When I first started learning about AI agents, I assumed they were powered by some completely new type
+                of model. After digging deeper, I realised that most modern Agentic AI systems are still built on the
+                same foundation: Large Language Models predicting the next token.
+            </p>
+
+            <p>
+                The difference is not necessarily a new model. The difference is how we use the model.
+            </p>
+
+            <p>
+                By combining reasoning, external tools, memory, and software workflows, we can build systems that are
+                far more capable than a standalone LLM. The ReAct paper showed that reasoning and acting do not need to
+                be separate capabilities. A model can think, interact with the outside world, observe the results, and
+                continue reasoning based on what it learns.
+            </p>
+
+            <p>
+                Building my NL2SQL project helped me understand this idea much more clearly. The LLM was not executing
+                SQL queries, reading databases, creating charts, or managing application state. It was primarily
+                responsible for reasoning. Everything else was handled by the surrounding software system. This
+                separation between reasoning and execution is one of the most important ideas behind modern Agentic AI.
+            </p>
+
+            <p>
+                In many ways, AI agents are less about creating a smarter model and more about creating better systems
+                around the model. The LLM provides the reasoning, while the application provides tools, memory,
+                validation, and the ability to interact with the real world.
+            </p>
+
+            <p>
+                As AI systems continue to evolve, I think understanding this distinction is important. The future may
+                not belong to models alone, but to systems that can effectively combine reasoning, actions,
+                observations, and external knowledge into a continuous feedback loop.
+            </p>
+
+            <p>
+                And interestingly, that loop looks surprisingly similar to how humans solve problems every day: think,
+                act, observe, learn, and think again.
+            </p>
+
+        </div>
+
+        <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+            <a href="../blog.html" class="back-link">← Back to Blog</a>
+        </div>
+        </div>
+    </article>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Adesh Ghadage. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/interactions.js"></script>
+</body>
+
+</html>
