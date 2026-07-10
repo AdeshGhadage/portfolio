@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Helm by Converting My Kubernetes Project - Blog</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <!-- <a href="../index.html" class="logo">AG</a> -->
+            <ul class="nav-links">
+                <li><a href="../index.html#home" class="nav-link">Home</a></li>
+                <li><a href="../index.html#about" class="nav-link">About</a></li>
+                <li><a href="../index.html#projects" class="nav-link">Projects</a></li>
+                <li><a href="../blog.html" class="nav-link active">Blog</a></li>
+                <li><a href="../index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <button class="menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Post Header -->
+    <header class="post-header">
+        <div class="container">
+            <a href="../blog.html" class="back-link">← Back to Blog</a>
+            <h1 class="page-title">Learning Helm by Converting My Kubernetes Project</h1>
+            <div class="post-meta">
+                <span>📅 10 July 2026</span>
+                <span>⏱️ 3 min read</span>
+                <span>🏷️ Kubernetes, Helm, DevOps</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Post Content -->
+    <article class="post-content">
+        <div class="container">
+            <h1><strong>Learning Helm by Converting My Kubernetes Project</strong></h1>
+
+            <p>When I decided to learn Helm, I didn't want another "Deploy NGINX using Helm" tutorial.</p>
+
+            <p>I already had a Kubernetes project—a chat application with three components:</p>
+
+            <ul>
+                <li>Frontend</li>
+                <li>Backend</li>
+                <li>MongoDB</li>
+            </ul>
+
+            <p>Instead of creating a new demo application, I asked myself a simple question:</p>
+
+            <p><strong>How would I convert an existing Kubernetes project into a production-ready Helm chart?</strong></p>
+
+            <p>This approach helped me understand not only <em>how</em> Helm works, but <em>why</em> it exists.</p>
+
+            <hr>
+
+            <h1><strong>My Initial Misconception</strong></h1>
+
+            <p>Initially, I thought Helm was simply a way to avoid writing YAML repeatedly.</p>
+
+            <p>I imagined that one Deployment template could generate Deployments for the backend, frontend, and MongoDB.</p>
+
+            <p>After studying more, I realized that's not the real purpose of Helm.</p>
+
+            <p>Helm is <strong>not about reducing the number of YAML files</strong>.</p>
+
+            <p>It is about making Kubernetes applications:</p>
+
+            <ul>
+                <li>Configurable</li>
+                <li>Reusable</li>
+                <li>Versioned</li>
+                <li>Easy to upgrade and rollback</li>
+            </ul>
+
+            <hr>
+
+            <h1><strong>The First Question I Learned to Ask</strong></h1>
+
+            <p>Before writing any Helm template, I now ask:</p>
+
+            <p><strong>What changes between environments?</strong></p>
+
+            <p>For example, in my backend Deployment:</p>
+
+            <ul>
+                <li>Replica count changes</li>
+                <li>Image tag changes</li>
+                <li>Secrets change</li>
+                <li>Database URI changes</li>
+            </ul>
+
+            <p>These belong in <code>values.yaml</code>.</p>
+
+            <p>Things like:</p>
+
+            <ul>
+                <li><code>kind: Deployment</code></li>
+                <li><code>apiVersion</code></li>
+                <li><code>spec.template</code></li>
+                <li>Labels structure</li>
+            </ul>
+
+            <p>don't usually change.</p>
+
+            <p>Those stay inside the template.</p>
+
+            <p>That completely changed how I approached Helm.</p>
+
+            <hr>
+
+            <h1><strong>Designing <code>values.yaml</code></strong></h1>
+
+            <p>One of the biggest lessons I learned is that you <strong>don't start by writing <code>values.yaml</code>.</strong></p>
+
+            <p>Instead, you discover it.</p>
+
+            <p>I opened my Kubernetes Deployment and highlighted everything that might change.</p>
+
+            <p>Eventually my configuration naturally became something like:</p>
+
+            <pre><code>backend:
+  replicaCount: 2
+
+  image:
+    repository: chat-backend
+    tag: latest
+
+  service:
+    port: 5000</code></pre>
+
+            <p>The template simply reads these values.</p>
+
+            <pre><code>replicas: {{ .Values.backend.replicaCount }}
+
+image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"</code></pre>
+
+            <p>Helm wasn't introducing anything magical.</p>
+
+            <p>It was simply replacing hardcoded values with configurable ones.</p>
+
+            <hr>
+
+            <h1><strong>Understanding <code>.Values</code>, <code>.Release</code>, and <code>.Chart</code></strong></h1>
+
+            <p>This was one of the most confusing parts initially.</p>
+
+            <p>Eventually it clicked.</p>
+
+            <h3><strong><code>.Values</code></strong></h3>
+
+            <p>Everything inside <code>values.yaml</code>.</p>
+
+            <p>Example:</p>
+
+            <pre><code>backend:
+  replicaCount: 2</code></pre>
+
+            <p>Accessed as:</p>
+
+            <pre><code>{{ .Values.backend.replicaCount }}</code></pre>
+
+            <hr>
+
+            <h3><strong><code>.Release.Name</code></strong></h3>
+
+            <p>This <strong>doesn't come from <code>values.yaml</code>.</strong></p>
+
+            <p>It comes from the install command.</p>
+
+            <pre><code>helm install chat-app .</code></pre>
+
+            <p>Now</p>
+
+            <pre><code>{{ .Release.Name }}</code></pre>
+
+            <p>becomes</p>
+
+            <pre><code>chat-app</code></pre>
+
+            <p>If I install the same chart again:</p>
+
+            <pre><code>helm install production .</code></pre>
+
+            <p>it becomes</p>
+
+            <pre><code>production</code></pre>
+
+            <p>This allows the same chart to be installed multiple times.</p>
+
+            <hr>
+
+            <h3><strong><code>.Chart.Name</code></strong></h3>
+
+            <p>This comes from <code>Chart.yaml</code>.</p>
+
+            <pre><code>name: chat-app</code></pre>
+
+            <p>Then</p>
+
+            <pre><code>{{ .Chart.Name }}</code></pre>
+
+            <p>renders to</p>
+
+            <pre><code>chat-app</code></pre>
+
+            <hr>
+
+            <h1><strong>Why I Didn't Use One Deployment Template</strong></h1>
+
+            <p>Initially I wanted one Deployment template for everything.</p>
+
+            <p>Then I compared my resources.</p>
+
+            <p>Backend has:</p>
+
+            <ul>
+                <li>Environment variables</li>
+                <li>JWT Secret</li>
+                <li>Mongo URI</li>
+            </ul>
+
+            <p>Frontend doesn't.</p>
+
+            <p>MongoDB has:</p>
+
+            <ul>
+                <li>Storage</li>
+                <li>Volume mounts</li>
+            </ul>
+
+            <p>Backend doesn't.</p>
+
+            <p>Trying to merge all of them into one template would require many conditional statements and make the chart harder to maintain.</p>
+
+            <p>So I kept separate templates.</p>
+
+            <ul>
+                <li><code>backend-deployment.yaml</code></li>
+                <li><code>frontend-deployment.yaml</code></li>
+                <li><code>mongodb-deployment.yaml</code></li>
+            </ul>
+
+            <p>The templates remain separate.</p>
+
+            <p>Only the configurable values move into <code>values.yaml</code>.</p>
+
+            <p>That felt much cleaner.</p>
+
+            <hr>
+
+            <h1><strong>Understanding Service Types</strong></h1>
+
+            <p>While converting the Services, I finally understood why Kubernetes has different Service types.</p>
+
+            <h3><strong>ClusterIP</strong></h3>
+
+            <p>Accessible only inside the cluster.</p>
+
+            <p>Perfect for:</p>
+
+            <ul>
+                <li>Backend APIs</li>
+                <li>MongoDB</li>
+                <li>Internal services</li>
+            </ul>
+
+            <hr>
+
+            <h3><strong>NodePort</strong></h3>
+
+            <p>Exposes the application through:</p>
+
+            <p>NodeIP:Port</p>
+
+            <p>Useful for local development.</p>
+
+            <hr>
+
+            <h3><strong>LoadBalancer</strong></h3>
+
+            <p>Creates a cloud load balancer on providers like AWS, Azure, or GCP.</p>
+
+            <p>Ideal for production applications that need public access.</p>
+
+            <hr>
+
+            <p>For my project I decided:</p>
+
+            <ul>
+                <li>Frontend → NodePort (during local development)</li>
+                <li>Backend → ClusterIP</li>
+                <li>MongoDB → ClusterIP</li>
+            </ul>
+
+            <hr>
+
+            <h1><strong>Helm Isn't Just a Template Engine</strong></h1>
+
+            <p>Another realization was that Helm behaves much like a package manager.</p>
+
+            <p>Initially my chart looked like:</p>
+
+            <pre><code>templates/
+
+backend
+frontend
+mongodb</code></pre>
+
+            <p>Later I learned about dependencies.</p>
+
+            <p>Instead of maintaining my own MongoDB chart forever, I can depend on an existing chart maintained by the community.</p>
+
+            <p>For example:</p>
+
+            <pre><code>dependencies:
+  - name: mongodb
+    repository: ...</code></pre>
+
+            <p>Then Helm downloads the dependency automatically.</p>
+
+            <p>This raised another question:</p>
+
+            <p>How do I know what configuration options the MongoDB chart supports?</p>
+
+            <p>The answer surprised me.</p>
+
+            <p>You don't invent them.</p>
+
+            <p>You use <strong>the API designed by the chart author</strong>.</p>
+
+            <p>The chart's <code>values.yaml</code> becomes its public configuration interface.</p>
+
+            <p>That was a big mindset shift.</p>
+
+            <p>When writing my own chart, I design the configuration.</p>
+
+            <p>When using someone else's chart, I consume the configuration they've already designed.</p>
+
+            <hr>
+
+            <h1><strong>The Development Workflow I Ended Up Following</strong></h1>
+
+            <p>Instead of immediately deploying every change, I started using this workflow.</p>
+
+            <pre><code>helm lint chat-app/
+
+helm template my-release chat-app/
+
+helm install my-release chat-app/</code></pre>
+
+            <p><code>helm lint</code> checks the chart.</p>
+
+            <p><code>helm template</code> shows the generated Kubernetes manifests.</p>
+
+            <p>Only after those looked correct did I install the chart.</p>
+
+            <p>This made debugging much easier.</p>
+
+            <hr>
+
+            <h1><strong>My Biggest Takeaway</strong></h1>
+
+            <p>The biggest lesson wasn't Helm syntax.</p>
+
+            <p>It was learning to think differently.</p>
+
+            <p>Instead of asking:</p>
+
+            <p>How do I convert Kubernetes YAML into Helm?</p>
+
+            <p>I now ask:</p>
+
+            <ul>
+                <li>Which values change?</li>
+                <li>Which values should stay fixed?</li>
+                <li>What should be configurable?</li>
+                <li>What should Helm generate automatically?</li>
+                <li>Am I designing a good configuration API?</li>
+            </ul>
+
+            <p>That shift in thinking made Helm much easier to understand.</p>
+
+            <p>I'm still learning, but converting a real project instead of following a toy example made Helm finally click for me.</p>
+            
+            <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+                <a href="../blog.html" class="back-link">← Back to Blog</a>
+            </div>
+        </div>
+    </article>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Adesh Ghadage. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/interactions.js"></script>
+</body>
+</html>
